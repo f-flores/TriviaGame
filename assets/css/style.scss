@@ -1,0 +1,28 @@
+/* stylesheet */
+
+// game font family
+//$game-font-1: 'Lato', sans-serif;
+//$game-font-2: 'Roboto Mono', monospace;
+
+// color theme for star wars game
+$game-bg-color: beige;
+$game-color-1: #021C26;
+$game-color-2: #124559;
+$game-color-3: #26221C;
+$game-color-4: #736C63;
+$game-color-5: #F2F2F2;
+
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+
+  body {
+    /* background image credit: https://images5.alphacoders.com/489/489261.jpg */
+    background-color: gray;
+  //  background-size: 100% 125%;
+  }
+
+}
