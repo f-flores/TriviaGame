@@ -10,6 +10,11 @@ var showImage;
 // Count will keep track of the index of the currently displaying picture.
 var count = 0;
 
+var hdr = $("head");
+
+console.log("Head: " + Object.entries(hdr));
+
+
 // TODO: Use jQuery to run "startSlideshow" when we click the "start" button.
 $("#start").on("click",startSlideshow);
 

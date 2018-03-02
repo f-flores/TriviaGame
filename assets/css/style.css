@@ -1,0 +1,23 @@
+/* stylesheet */
+* {
+  box-sizing: border-box; }
+
+html body {
+  /* background image credit: https://images5.alphacoders.com/489/489261.jpg */
+  background-color: gray; }
+  html body #image-holder {
+    /* Positioning */
+    margin: 0 auto;
+    /* Box-model */
+    width: 400px;
+    /* Typography */
+    text-align: center; }
+  html body #buttons {
+    /* Positioning */
+    margin: 50px 0;
+    /* Typography */
+    text-align: center; }
+  html body button {
+    /* Box-model */
+    width: 200px;
+    height: 100px; }
