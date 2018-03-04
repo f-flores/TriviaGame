@@ -6,6 +6,10 @@ html body {
   /* background image credit: https://images5.alphacoders.com/489/489261.jpg */
   background-color: gray;
   height: 100%; }
+  html body .custom-button:hover {
+    background-color: red;
+    /* Positioning */
+    /* Box-model */ }
   html body .trivia-square {
     background-color: pink;
     color: darkblue;
@@ -18,8 +22,7 @@ html body {
     text-align: center; }
   html body #time-holder {
     position: absolute;
-    margin-top: 100px;
-    top: 5%; }
+    top: 150px; }
   html body #question-holder {
     /* Positioning */
     margin: 0 auto;
@@ -28,6 +31,13 @@ html body {
     border: 2px 2px solid black;
     /* Typography */
     text-align: center; }
+  html body #image-holder {
+    /* Positioning */
+    position: absolute;
+    display: block;
+    margin-left: 30%;
+    margin-top: 10%;
+    width: 40%; }
   html body #start-control {
     /* Positioning */
     position: absolute;

@@ -24,6 +24,15 @@ html {
     background-color: gray;
     height: 100%;
   //  background-size: 100% 125%;
+  .custom-button:hover {
+    background-color: red;
+    /* Positioning */
+    //margin: 0 auto;
+
+    /* Box-model */
+    //width: 600px;
+    //border: 2px 2px solid black;
+  }
   .trivia-square {
     background-color: pink;
     color: darkblue;
@@ -39,8 +48,8 @@ html {
   }
   #time-holder {
     position: absolute;
-    margin-top: 100px;
-    top: 5%;
+    top: 150px;
+    //top: 5%;
   }
   #question-holder {
 
@@ -53,6 +62,16 @@ html {
 
     /* Typography */
     text-align: center;
+
+  }
+  #image-holder {
+
+    /* Positioning */
+    position: absolute;
+    display: block;
+    margin-left: 30%;
+    margin-top: 10%;
+    width: 40%;
 
   }
 

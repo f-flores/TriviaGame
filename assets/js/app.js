@@ -143,24 +143,27 @@ $(document).ready(() => {
   var gameState = {
     "isTimeUp": false,
     "isGameOver": false,
+    "isGameBeginning": false,
     "numCorrect": 0,
     "numWrong": 0,
     "questionCount": 0
   };
+  // ------------------------------------------------------------------------------------------
+  // the countDown object is largely based on the stopWatch object reviewed in the
+  //   RUTSOM201801FSF4-Class-Repository-FSF repository on 2/24/2018
   var countDown = {
     "time": MaxWait,
     "reset": () => {
 
       countDown.time = MaxWait;
-      countDown.lap = 1;
 
       // Update the time-holder div
-      $("#timer-holder").html("Time Remaining: " + countDown.time.toString());
+      $("#timer-holder").html("<h4>Time Remaining: " + countDown.time.toString() + "</h4>");
 
     },
     "start": () => {
       // display time remaining
-      $("#timer-holder").html("Time Remaining: " + countDown.time.toString());
+      $("#timer-holder").html("<h4>Time Remaining: " + countDown.time.toString() + "</h4>");
       // start countDown and set the clock to running.
       if (!clockRunning) {
           intervalId = setInterval(countDown.count, 1000);
@@ -187,10 +190,10 @@ $(document).ready(() => {
      // $("#timer-holder").text(converted);
       if (converted === "00") {
         countDown.stop();
-        $("#timer-holder").html("Time is up!");
+        $("#timer-holder").html("<h4>Time is up!</h4>");
         gameState.isTimeUp = true;
       } else {
-        $("#timer-holder").html("Time Remaining: " + converted.toString());
+        $("#timer-holder").html("<h4>Time Remaining: " + converted.toString() + "</h4>");
       }
     },
     "timeConverter": (tm) => {
@@ -208,7 +211,7 @@ $(document).ready(() => {
         minutes = "0" + minutes;
       }
 
-      // return minutes + seconds;
+      // only return seconds for trivia game instead of minutes + seconds;
       return seconds;
     }
   };
@@ -236,24 +239,57 @@ $(document).ready(() => {
   // displayQuestion() listens for start button to be clicked
   //
   function displayQuestion() {
-    $("#question-holder").html("question: " + gameState.questionCount.toString());
+    var choiceBtn,
+        qDiv = $("<div>"),
+        questionText = "",
+        choiceText = "",
+        iq = 0;
+
     displayTime();
+    // clear and remove image holder
+    $("#image-holder").remove();
+    // empty possible choices from section
+    $(".trivia-answer").remove();
+    // Adding a data-attribute
+    qDiv.attr("data-name", gameState.questionCount);
+   // qDiv.attr("id", "qid" + gameState.questionCount.toString());
+    questionText = "<h3 class=\"display-3\">" + triviaArray[gameState.questionCount].q + "</h3>";
+    qDiv.html(questionText);
+    $(qDiv).append(qDiv);
+    for (iq = 0; iq < triviaArray[gameState.questionCount].choices.length; iq++) {
+      choiceBtn = $("<button>");
+      choiceBtn.attr("num-choice",iq);
+      choiceBtn.addClass("custom-button");
+      choiceText = "<h3 class=\"display-3\">" + triviaArray[gameState.questionCount].choices[iq] + "</h3>";
+      choiceBtn.html(choiceText);
+      $(qDiv).append(choiceBtn);
+    }
+  //  $("#question-holder").html("question: " + gameState.questionCount.toString();
+    $("#question-holder").append(qDiv);
   }
 
   // -----------------------------------------------------------------------------
   // nextQuestion displays following question in trivia game
   //
   function nextQuestion() {
+    var ansIndex = triviaArray[gameState.questionCount].a,
+        correctChoice = triviaArray[gameState.questionCount].choices[ansIndex];
+
+    // remove possible choices from section
+    $("#question.holder").remove();
     gameState.questionCount++;
     // display answer
     console.log("Game State Question Count: ", gameState.questionCount);
-    $("#question-holder").html("Answer is: " + gameState.questionCount.toString());
+    $("#question-holder").html("<h2 class=\"display-2 trivia-answer\">Answer is: " + correctChoice + "</h2>");
+   // $("#question-holder").append(qDiv);
 
     // Use a setTimeout to run displayQuestion after answer interval
     setTimeout(displayQuestion, AnswerInterval);
 
     if (gameState.questionCount === triviaArray.length) {
       console.log("end of game... questionCount equals triviaArray.length");
+   //   gameOverRoutine();
+      gameState.questionCount = 0;
     }
   }
 
@@ -280,23 +316,32 @@ $(document).ready(() => {
   function initGameRoutine() {
     gameState.isTimeUp = false;
     gameState.isGameOver = false;
+    gameState.isGameBeginning = true;
+   // $("#start").detach();
     $("#start").animate({"opacity": "0"});
+    $("#question-holder").html("<h2>Loading game... Please wait</h2>");
+    $("#image-holder").html("<img src='./assets/images/loading.gif' alt='Loading gif'>");
  //   displayTime();
-    displayQuestion();
     showQuestion = setInterval(nextQuestion, SecondsPerQuestion + AnswerInterval);
+    setTimeout(displayQuestion, AnswerInterval);
   }
 
   // -----------------------------------------------------------------------------
   // displayTime() displays time remaining in time div
   //
   function displayTime() {
+    if (gameState.isGameBeginning === true) {
+      gameState.isGameBeginning = false;
+    }
     countDown.reset();
-    console.log("in displayTime()");
     countDown.start();
-/*     if (countDown.time === 0) {
-      countDown.stop();
-      console.log("Time is up!");
-    } */
+
+    console.log("in displayTime()");
+   // countDown.start();
+//     if (countDown.time === 0) {
+//      countDown.stop();
+//      console.log("Time is up!");
+//    }
   }
 
 
