@@ -12,9 +12,7 @@ html body {
     width: 100%; }
   html body .custom-button:hover {
     background-color: red;
-    cursor: pointer;
-    /* Positioning */
-    /* Box-model */ }
+    cursor: pointer; }
   html body .trivia-square {
     background-color: pink;
     color: darkblue;

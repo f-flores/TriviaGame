@@ -118,8 +118,8 @@
 //   have restartOption
 // foo(() => this.a)
 $(document).ready(() => {
-  const MaxWait = 6,
-        AnswerWait = 2,
+  const MaxWait = 3,
+        AnswerWait = 1,
         SecondsPerQuestion = MaxWait * 1000,
         AnswerInterval = AnswerWait * 1000;
   var triviaArray = [
@@ -133,19 +133,21 @@ $(document).ready(() => {
       "a": 0,
       "choices": ["choice 1","choice 2","choice 3","choice 4"],
       "q": "Question 2"
-    },
-    {
+    } /*,
+      {
       "a": 2,
       "choices": ["choice 1","choice 2","choice 3","choice 4"],
       "q": "Question 3"
-    }
+    } */
    ];
   var gameState = {
     "isTimeUp": false,
     "isGameOver": false,
     "isGameBeginning": false,
+    "currentChoice": "",
     "numCorrect": 0,
     "numWrong": 0,
+    "numUnanswered": 0,
     "questionCount": 0
   };
   // ------------------------------------------------------------------------------------------
@@ -188,7 +190,7 @@ $(document).ready(() => {
 
       // show the converted time in the "time-holder" div.
      // $("#timer-holder").text(converted);
-      if (converted === "00") {
+      if (converted === "00" || !clockRunning) {
         countDown.stop();
         $("#timer-holder").html("<h4>Time is up!</h4>");
         gameState.isTimeUp = true;
@@ -247,17 +249,18 @@ $(document).ready(() => {
 
     displayTime();
     // clear and remove image and prior answer if any
-    $("#image-holder").remove();
+    $("#image-holder").empty();
     $(".trivia-answer").remove();
-    // remove message from id question-holder
+    // empty content from id question-holder
     $("#question-holder").empty();
 
     // Adding a data-attribute
     qDiv.attr("data-name", gameState.questionCount);
-   // qDiv.attr("id", "qid" + gameState.questionCount.toString());
     questionText = "<h3 class=\"display-3\">" + triviaArray[gameState.questionCount].q + "</h3>";
     qDiv.html(questionText);
     $(qDiv).append(qDiv);
+
+    // build buttons for each question
     for (iq = 0; iq < triviaArray[gameState.questionCount].choices.length; iq++) {
       choiceBtn = $("<button>");
       choiceBtn.attr("num-choice",iq);
@@ -266,7 +269,7 @@ $(document).ready(() => {
       choiceBtn.html(choiceText);
       $(qDiv).append(choiceBtn);
     }
-  //  $("#question-holder").html("question: " + gameState.questionCount.toString();
+
     $("#question-holder").append(qDiv);
   }
 
@@ -278,30 +281,91 @@ $(document).ready(() => {
         correctChoice = triviaArray[gameState.questionCount].choices[ansIndex];
 
     // remove possible choices from section
-    $("#question.holder").remove();
+    // $("#question.holder").remove();
+    $("#question.holder").empty();
     gameState.questionCount++;
     // display answer
     console.log("Game State Question Count: ", gameState.questionCount);
     $("#question-holder").html("<h2 class=\"display-2 trivia-answer\">Answer is: " + correctChoice + "</h2>");
-   // $("#question-holder").append(qDiv);
 
     // Use a setTimeout to run displayQuestion after answer interval
     setTimeout(displayQuestion, AnswerInterval);
 
     if (gameState.questionCount === triviaArray.length) {
       console.log("end of game... questionCount equals triviaArray.length");
-   //   gameOverRoutine();
-      gameState.questionCount = 0;
+      gameOverRoutine();
     }
   }
 
+
   // -----------------------------------------------------------------------------
-  // stopQuestion stops current question
+  // gameOverRoutine() executes a series of functions when game is over
   //
-  function stopQuestion() {
+  function gameOverRoutine() {
+    console.log("in gameOverRoutine()");
+    gameState.questionCount = 0;
+    stopDisplayQuestions();
+    showScoreBoard();
+   // setTimeout(showScoreBoard, 9000);
+    restartGame();
+  }
+
+
+  // -----------------------------------------------------------------------------
+  // showScoreBoard() displays game score
+  //
+  function showScoreBoard() {
+    var htmlText = "",
+        scoreDiv = $("<div>");
+
+    countDown.stop();
+
+    // empty prior content
+    $("#question-holder").empty();
+
+    console.log("in showScoreBoard()");
+    htmlText = "<p>Score: </p>";
+    htmlText = "<p>Correct Answers: " + gameState.numCorrect + "</p>" +
+      "<p>Incorrect Answers: " + gameState.numWrong + "</p>" +
+      "<p>Unanswered: " + gameState.numUnanswered + "</p>";
+    scoreDiv.attr("id","score-board");
+    scoreDiv.html(htmlText);
+    console.log("htmlText: " + htmlText);
+    $("#score-board").append(scoreDiv);
+  }
+
+
+  // -----------------------------------------------------------------------------
+  // restartGame() resets values and creates restart button
+  //
+  function restartGame() {
+    var restartBtn = $("<button>");
+
+    console.log("in restartGame()");
+    // $("#question-holder").empty();
+    restartBtn.text("Restart");
+    $("#score-board").append(restartBtn);
+  }
+
+
+  // -----------------------------------------------------------------------------
+  // stopDisplayQuestions stops current question
+  //
+  function stopDisplayQuestions() {
+    var htmlText = "";
+
     console.log("in stopQuestion");
+    // stop countdown and clear interval
     countDown.stop();
     clearInterval(showQuestion);
+    // setTimeout(showScoreBoard, 1000);
+    $("#question-holder").empty();
+    htmlText = "<p>Score: </p>";
+    htmlText = "<p>Correct Answers: " + gameState.numCorrect + "</p>" +
+      "<p>Incorrect Answers: " + gameState.numWrong + "</p>" +
+      "<p>Unanswered: " + gameState.numUnanswered + "</p>";
+    $("#score-board").text(htmlText);
+
   }
 
 
@@ -319,11 +383,11 @@ $(document).ready(() => {
     gameState.isTimeUp = false;
     gameState.isGameOver = false;
     gameState.isGameBeginning = true;
-   // $("#start").detach();
+    // $("#start").detach();
     $("#start").animate({"opacity": "0"});
     $("#question-holder").html("<h2>Loading game... Please wait</h2>");
     $("#image-holder").html("<img src='./assets/images/loading.gif' alt='Loading gif'>");
- //   displayTime();
+    //   displayTime();
     showQuestion = setInterval(nextQuestion, SecondsPerQuestion + AnswerInterval);
     setTimeout(displayQuestion, AnswerInterval);
   }
