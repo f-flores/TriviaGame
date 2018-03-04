@@ -2,6 +2,10 @@
 var gulp = require('gulp');
 var sass = require('gulp-sass');
 
+// eslint configuration
+var eslint = require('gulp-eslint');
+require('gulp-lint-tasks');
+
 gulp.task('sass', function() {
     gulp.src('assets/css/*.scss')
         .pipe(sass())

@@ -4,20 +4,38 @@
 
 html body {
   /* background image credit: https://images5.alphacoders.com/489/489261.jpg */
-  background-color: gray; }
-  html body #image-holder {
+  background-color: gray;
+  height: 100%; }
+  html body .trivia-square {
+    background-color: pink;
+    color: darkblue;
+    padding: 0% 5% 5% 5%;
+    margin: 8% 8% 7% 8%;
+    height: 600px; }
+  html body .trivia-button {
+    background-color: blue;
+    color: white;
+    text-align: center; }
+  html body #time-holder {
+    position: absolute;
+    margin-top: 100px;
+    top: 5%; }
+  html body #question-holder {
     /* Positioning */
     margin: 0 auto;
     /* Box-model */
-    width: 400px;
+    width: 600px;
+    border: 2px 2px solid black;
     /* Typography */
     text-align: center; }
-  html body #buttons {
+  html body #start-control {
     /* Positioning */
-    margin: 50px 0;
+    position: absolute;
+    top: 45%;
+    left: 0%;
+    width: 100%;
     /* Typography */
     text-align: center; }
   html body button {
     /* Box-model */
-    width: 200px;
-    height: 100px; }
+    text-align: center; }
