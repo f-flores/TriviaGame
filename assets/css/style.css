@@ -6,8 +6,13 @@ html body {
   /* background image credit: https://images5.alphacoders.com/489/489261.jpg */
   background-color: gray;
   height: 100%; }
+  html body .custom-button {
+    display: block;
+    background: transparent;
+    width: 100%; }
   html body .custom-button:hover {
     background-color: red;
+    cursor: pointer;
     /* Positioning */
     /* Box-model */ }
   html body .trivia-square {

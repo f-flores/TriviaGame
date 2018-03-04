@@ -118,8 +118,8 @@
 //   have restartOption
 // foo(() => this.a)
 $(document).ready(() => {
-  const MaxWait = 10,
-        AnswerWait = 3,
+  const MaxWait = 6,
+        AnswerWait = 2,
         SecondsPerQuestion = MaxWait * 1000,
         AnswerInterval = AnswerWait * 1000;
   var triviaArray = [
@@ -246,10 +246,12 @@ $(document).ready(() => {
         iq = 0;
 
     displayTime();
-    // clear and remove image holder
+    // clear and remove image and prior answer if any
     $("#image-holder").remove();
-    // empty possible choices from section
     $(".trivia-answer").remove();
+    // remove message from id question-holder
+    $("#question-holder").empty();
+
     // Adding a data-attribute
     qDiv.attr("data-name", gameState.questionCount);
    // qDiv.attr("id", "qid" + gameState.questionCount.toString());
