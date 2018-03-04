@@ -133,12 +133,12 @@ $(document).ready(() => {
       "a": 0,
       "choices": ["choice 1","choice 2","choice 3","choice 4"],
       "q": "Question 2"
-    } /*,
+    },
       {
       "a": 2,
       "choices": ["choice 1","choice 2","choice 3","choice 4"],
       "q": "Question 3"
-    } */
+    }
    ];
   var gameState = {
     "isTimeUp": false,
@@ -153,6 +153,8 @@ $(document).ready(() => {
   // ------------------------------------------------------------------------------------------
   // the countDown object is largely based on the stopWatch object reviewed in the
   //   RUTSOM201801FSF4-Class-Repository-FSF repository on 2/24/2018
+  var clockRunning = false,
+      intervalId;
   var countDown = {
     "time": MaxWait,
     "reset": () => {
@@ -190,7 +192,7 @@ $(document).ready(() => {
 
       // show the converted time in the "time-holder" div.
      // $("#timer-holder").text(converted);
-      if (converted === "00" || !clockRunning) {
+      if (converted === "00" || clockRunning === false) {
         countDown.stop();
         $("#timer-holder").html("<h4>Time is up!</h4>");
         gameState.isTimeUp = true;
@@ -220,9 +222,7 @@ $(document).ready(() => {
   var giphyKey = "zOxVha9Ha82FHhEMPSbIBvoOOApcLrBK",
       giphyURL = "http://api.giphy.com/v1/gifs/search?",
       queryURL = giphyURL + "q=ryan+gosling&api_key=" + giphyKey + "&limit=2",
-      intervalId = 0,
-      showQuestion = "",
-      clockRunning = false;
+      showQuestion = "";
 
  // console.log("Begin trivia game");
   $.ajax({
@@ -247,30 +247,33 @@ $(document).ready(() => {
         choiceText = "",
         iq = 0;
 
+    console.log("In displayQuestion()");
     displayTime();
     // clear and remove image and prior answer if any
     $("#image-holder").empty();
-    $(".trivia-answer").remove();
+    $(".trivia-answer").empty();
     // empty content from id question-holder
     $("#question-holder").empty();
 
-    // Adding a data-attribute
-    qDiv.attr("data-name", gameState.questionCount);
-    questionText = "<h3 class=\"display-3\">" + triviaArray[gameState.questionCount].q + "</h3>";
-    qDiv.html(questionText);
-    $(qDiv).append(qDiv);
+    if (!gameState.isGameOver) {
+      // Adding a data-attribute
+      qDiv.attr("data-name", gameState.questionCount);
+      questionText = "<h3 class=\"display-3\">" + triviaArray[gameState.questionCount].q + "</h3>";
+      qDiv.html(questionText);
+      $(qDiv).append(qDiv);
 
-    // build buttons for each question
-    for (iq = 0; iq < triviaArray[gameState.questionCount].choices.length; iq++) {
-      choiceBtn = $("<button>");
-      choiceBtn.attr("num-choice",iq);
-      choiceBtn.addClass("custom-button");
-      choiceText = "<h3 class=\"display-3\">" + triviaArray[gameState.questionCount].choices[iq] + "</h3>";
-      choiceBtn.html(choiceText);
-      $(qDiv).append(choiceBtn);
+      // build buttons for each question
+      for (iq = 0; iq < triviaArray[gameState.questionCount].choices.length; iq++) {
+        choiceBtn = $("<button>");
+        choiceBtn.attr("num-choice",iq);
+        choiceBtn.addClass("custom-button");
+        choiceText = "<h3 class=\"display-4\">" + triviaArray[gameState.questionCount].choices[iq] + "</h3>";
+        choiceBtn.html(choiceText);
+        $(qDiv).append(choiceBtn);
+      }
+
+      $("#question-holder").append(qDiv);
     }
-
-    $("#question-holder").append(qDiv);
   }
 
   // -----------------------------------------------------------------------------
@@ -280,13 +283,13 @@ $(document).ready(() => {
     var ansIndex = triviaArray[gameState.questionCount].a,
         correctChoice = triviaArray[gameState.questionCount].choices[ansIndex];
 
+    console.log("in nextQuestion()");
     // remove possible choices from section
-    // $("#question.holder").remove();
     $("#question.holder").empty();
     gameState.questionCount++;
     // display answer
     console.log("Game State Question Count: ", gameState.questionCount);
-    $("#question-holder").html("<h2 class=\"display-2 trivia-answer\">Answer is: " + correctChoice + "</h2>");
+    $("#question-holder").html("<h2 class=\"display-3 trivia-answer\">Answer is: " + correctChoice + "</h2>");
 
     // Use a setTimeout to run displayQuestion after answer interval
     setTimeout(displayQuestion, AnswerInterval);
@@ -304,9 +307,9 @@ $(document).ready(() => {
   function gameOverRoutine() {
     console.log("in gameOverRoutine()");
     gameState.questionCount = 0;
+    gameState.isGameOver = true;
     stopDisplayQuestions();
     showScoreBoard();
-   // setTimeout(showScoreBoard, 9000);
     restartGame();
   }
 
@@ -318,12 +321,12 @@ $(document).ready(() => {
     var htmlText = "",
         scoreDiv = $("<div>");
 
+    console.log("in showScoreBoard()");
     countDown.stop();
 
     // empty prior content
     $("#question-holder").empty();
 
-    console.log("in showScoreBoard()");
     htmlText = "<p>Score: </p>";
     htmlText = "<p>Correct Answers: " + gameState.numCorrect + "</p>" +
       "<p>Incorrect Answers: " + gameState.numWrong + "</p>" +
@@ -344,28 +347,25 @@ $(document).ready(() => {
     console.log("in restartGame()");
     // $("#question-holder").empty();
     restartBtn.text("Restart");
+    restartBtn.addClass("restart-btn");
     $("#score-board").append(restartBtn);
   }
+
+  $(".restart-btn").on("click", () => {
+    console.log("In restart button()");
+  });
 
 
   // -----------------------------------------------------------------------------
   // stopDisplayQuestions stops current question
   //
   function stopDisplayQuestions() {
-    var htmlText = "";
-
-    console.log("in stopQuestion");
+    console.log("in stopDisplayQuestions()");
     // stop countdown and clear interval
-    countDown.stop();
+    // countDown.stop();
     clearInterval(showQuestion);
-    // setTimeout(showScoreBoard, 1000);
-    $("#question-holder").empty();
-    htmlText = "<p>Score: </p>";
-    htmlText = "<p>Correct Answers: " + gameState.numCorrect + "</p>" +
-      "<p>Incorrect Answers: " + gameState.numWrong + "</p>" +
-      "<p>Unanswered: " + gameState.numUnanswered + "</p>";
-    $("#score-board").text(htmlText);
 
+    $("#question-holder").empty();
   }
 
 
@@ -373,6 +373,7 @@ $(document).ready(() => {
   // beginTrivia() listens for start button to be clicked
   //
   function beginTrivia() {
+    console.log("in beginTrivia()");
     $("#start").on("click", initGameRoutine);
   }
 
@@ -380,14 +381,15 @@ $(document).ready(() => {
   // initGameRoutine() sets some initial variables for trivia game
   //
   function initGameRoutine() {
+    console.log("in initGameRoutine()");
     gameState.isTimeUp = false;
     gameState.isGameOver = false;
     gameState.isGameBeginning = true;
-    // $("#start").detach();
+
     $("#start").animate({"opacity": "0"});
     $("#question-holder").html("<h2>Loading game... Please wait</h2>");
     $("#image-holder").html("<img src='./assets/images/loading.gif' alt='Loading gif'>");
-    //   displayTime();
+
     showQuestion = setInterval(nextQuestion, SecondsPerQuestion + AnswerInterval);
     setTimeout(displayQuestion, AnswerInterval);
   }
@@ -396,22 +398,21 @@ $(document).ready(() => {
   // displayTime() displays time remaining in time div
   //
   function displayTime() {
+    console.log("in displayTime()");
     if (gameState.isGameBeginning === true) {
       gameState.isGameBeginning = false;
     }
-    countDown.reset();
-    countDown.start();
-
-    console.log("in displayTime()");
-   // countDown.start();
-//     if (countDown.time === 0) {
-//      countDown.stop();
-//      console.log("Time is up!");
-//    }
+    if (gameState.isGameOver) {
+      countDown.stop();
+    } else {
+      countDown.reset();
+      countDown.start();
+    }
   }
 
 
   function doTriviaGame() {
+    console.log("in doTriviaGame()");
     beginTrivia();
     if (gameState.isTimeUp === false) {
       console.log("show question");
