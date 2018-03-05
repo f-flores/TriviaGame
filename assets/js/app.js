@@ -331,10 +331,10 @@ $(document).ready(() => {
     htmlText = "<p>Correct Answers: " + gameState.numCorrect + "</p>" +
       "<p>Incorrect Answers: " + gameState.numWrong + "</p>" +
       "<p>Unanswered: " + gameState.numUnanswered + "</p>";
-    scoreDiv.attr("id","score-board");
+    scoreDiv.attr("id","score-stats");
     scoreDiv.html(htmlText);
     console.log("htmlText: " + htmlText);
-    $("#score-board").append(scoreDiv);
+    $("#score-board").prepend(scoreDiv);
   }
 
 
@@ -345,16 +345,22 @@ $(document).ready(() => {
     var restartBtn = $("<button>");
 
     console.log("in restartGame()");
-    // $("#question-holder").empty();
+
+    // creates restart button
     restartBtn.text("Restart");
-    restartBtn.addClass("restart-btn");
-    $("#score-board").append(restartBtn);
+    restartBtn.attr("id","restart-btn");
+    $("#restart-section").append(restartBtn);
+    restartBtn.on("click", resetGame);
   }
 
-  $(".restart-btn").on("click", () => {
-    console.log("In restart button()");
-  });
-
+  // -----------------------------------------------------------------------------
+  // resetGame() resets game and begins new trivia game
+  //
+  function resetGame() {
+    $("#restart-section, #score-board").empty();
+    // empty scoreboard section
+    initGameRoutine();
+  }
 
   // -----------------------------------------------------------------------------
   // stopDisplayQuestions stops current question
@@ -378,20 +384,33 @@ $(document).ready(() => {
   }
 
   // -----------------------------------------------------------------------------
+  // resetGameStats() reinitializes the gameState object
+  //
+  function resetGameStats() {
+    gameState.isTimeUp = false;
+    gameState.isGameOver = false;
+    gameState.isGameBeginning = true;
+    gameState.currentChoice = "";
+    gameState.numCorrect = 0;
+    gameState.numWrong = 0;
+    gameState.numUnanswered = 0;
+    gameState.questionCount = 0;
+  }
+
+  // -----------------------------------------------------------------------------
   // initGameRoutine() sets some initial variables for trivia game
   //
   function initGameRoutine() {
     console.log("in initGameRoutine()");
-    gameState.isTimeUp = false;
-    gameState.isGameOver = false;
-    gameState.isGameBeginning = true;
+    resetGameStats();
 
     $("#start").animate({"opacity": "0"});
     $("#question-holder").html("<h2>Loading game... Please wait</h2>");
     $("#image-holder").html("<img src='./assets/images/loading.gif' alt='Loading gif'>");
 
     showQuestion = setInterval(nextQuestion, SecondsPerQuestion + AnswerInterval);
-    setTimeout(displayQuestion, AnswerInterval);
+    displayQuestion();
+    // setTimeout(displayQuestion, AnswerInterval);
   }
 
   // -----------------------------------------------------------------------------
