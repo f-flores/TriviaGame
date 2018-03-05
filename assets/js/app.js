@@ -1,4 +1,4 @@
-/** *************************************************************************
+/** *******************************************************************************************
  *  File name: app.js
  *  Author: Fabian Flores
  *  Date: March, 2018
@@ -12,7 +12,6 @@
         SecondsPerQuestion = MaxWait * 1000,
         AnswerInterval = AnswerWait * 1000;
   var triviaArray = [
-    //    count = 0, // count index, have this count be global
     {
       "a": 1,
       "choices": ["Choice 1","Choice 2","Choice 3","Choice 4"],
@@ -79,10 +78,7 @@
       // Get current time, pass that into the countDown.timeConverter function,
       converted = countDown.timeConverter(countDown.time);
 
-      console.log(converted);
-
       // show the converted time in the "time-holder" div.
-     // $("#timer-holder").text(converted);
       if (converted === "00" || clockRunning === false) {
         countDown.stop();
         $("#timer-holder").html("<h4>Time is up!</h4>");
@@ -125,7 +121,7 @@
     console.log(JSON.stringify(response));
     console.log("Result: " + result);
   });
-  console.log("end");
+  // console.log("end");
   console.log("Trivia Array: " + triviaArray);
 
   // -----------------------------------------------------------------------------
@@ -135,15 +131,15 @@
     var choice;
 
     event.preventDefault();
-    console.log("in getTriviaChoice");
-    console.log("Trivia choice button clicked... ");
+    // console.log("in getTriviaChoice");
+    // console.log("Trivia choice button clicked... ");
 
 
     if (gameState.isGameOver) {
       clearInterval(showQuestion);
     } else {
       choice = $(this).attr("num-choice");
-      console.log("clicked choice: " + choice);
+      // console.log("clicked choice: " + choice);
       gameState.currentChoice = parseInt(choice, 10);
       clearInterval(showQuestion);
       nextQuestion();
@@ -200,21 +196,21 @@
     var ansIndex = triviaArray[gameState.questionCount].a,
         correctChoice = triviaArray[gameState.questionCount].choices[ansIndex];
 
-    console.log("in nextQuestion()");
-    console.log("current choice: " + gameState.currentChoice);
-    console.log("type of current choice: " + typeof gameState.currentChoice);
-    console.log("correct choice: " + ansIndex);
-    console.log("type of correct choice: " + typeof ansIndex);
+    // console.log("in nextQuestion()");
+    // console.log("current choice: " + gameState.currentChoice);
+    // console.log("type of current choice: " + typeof gameState.currentChoice);
+    // console.log("correct choice: " + ansIndex);
+    // console.log("type of correct choice: " + typeof ansIndex);
     if (gameState.currentChoice === "") {
-      console.log("UNANSWERED question");
+      // console.log("UNANSWERED question");
       gameState.correctAnswer = false;
       gameState.numUnanswered++;
     } else if (gameState.currentChoice === ansIndex) {
-      console.log("CORRECT answer!");
+      // console.log("CORRECT answer!");
       gameState.correctAnswer = true;
       gameState.numCorrect++;
     } else {
-      console.log("INCORRECT answer!");
+      // console.log("INCORRECT answer!");
       gameState.correctAnswer = false;
       gameState.numWrong++;
     }
@@ -223,12 +219,12 @@
 
     gameState.questionCount++;
     // display answer
-    console.log("Game State Question Count: ", gameState.questionCount);
+    // console.log("Game State Question Count: ", gameState.questionCount);
     $("#question-holder").html("<h2 class=\"display-3 trivia-answer\">Answer is: </h2>" +
       "<h2 class=\"display-3 trivia-answer\">" + correctChoice + "</h2>");
 
     if (gameState.questionCount === triviaArray.length) {
-      console.log("end of game... questionCount equals triviaArray.length");
+      // console.log("end of game... questionCount equals triviaArray.length");
       setTimeout(gameOverRoutine, AnswerInterval);
     } else {
       // Use a setTimeout to run displayQuestion after answer interval
@@ -241,7 +237,7 @@
   // gameOverRoutine() executes a series of functions when game is over
   //
   function gameOverRoutine() {
-    console.log("in gameOverRoutine()");
+    // console.log("in gameOverRoutine()");
     gameState.isGameOver = true;
     stopDisplayQuestions();
     showScoreBoard();
@@ -256,7 +252,7 @@
     var htmlText = "",
         scoreDiv = $("<div>");
 
-    console.log("in showScoreBoard()");
+    // console.log("in showScoreBoard()");
     countDown.stop();
 
     // empty prior content
@@ -279,7 +275,7 @@
   function restartGame() {
     var restartBtn = $("<button>");
 
-    console.log("in restartGame()");
+    // console.log("in restartGame()");
 
     // creates restart button
     restartBtn.text("Restart");
@@ -293,7 +289,6 @@
   //
   function resetGame() {
     $("#restart-section, #score-board").empty();
-    // $("#question-div").remove();
     $(".trivia-choice-button").remove();
 
     initGameRoutine();
@@ -305,13 +300,10 @@
   function stopDisplayQuestions() {
     var startBtn = $("#start");
 
-    console.log("in stopDisplayQuestions()");
-    // stop countdown and clear interval
-    // countDown.stop();
+    // console.log("in stopDisplayQuestions()");
     $(startBtn).blur();
     clearTimeout(answerTimeout);
     clearInterval(showQuestion);
-
     $("#question-holder").empty();
   }
 
@@ -342,7 +334,7 @@
   // initGameRoutine() sets some initial variables for trivia game
   //
   function initGameRoutine() {
-    console.log("in initGameRoutine()");
+    // console.log("in initGameRoutine()");
     resetGameStats();
 
     $("#start").animate({"opacity": "0"});
@@ -359,10 +351,7 @@
   // displayTime() displays time remaining in time div
   //
   function displayTime() {
-    console.log("in displayTime()");
-    if (gameState.isGameBeginning === true) {
-      gameState.isGameBeginning = false;
-    }
+    // console.log("in displayTime()");
     if (gameState.isGameOver) {
       countDown.stop();
     } else {
@@ -373,20 +362,13 @@
 
 
   function doTriviaGame() {
-    console.log("in doTriviaGame()");
+    // console.log("in doTriviaGame()");
     beginTrivia();
-    if (gameState.isTimeUp === false) {
-      console.log("show question");
-    } else {
-      console.log("show next question");
-    }
   }
 
   if (!gameState.isGameOver) {
     doTriviaGame();
-    // Generic function
+    // capture trivia question's buttons  
     $(document).on("click", ".trivia-choice-button", getTriviaChoice);
   }
-  // Generic function
- // $(document).on("click", ".trivia-choice-button", getTriviaChoice);
 });
