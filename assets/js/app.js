@@ -1,33 +1,12 @@
-//
-//  look over slide show activity to see how to code game
-//    especially the time intervals
-//  go over countDown activity
-//    to view how to display timers....
-//
-//
-// *****************************
-// triviaGame
-//  initializeTriviaGame():
-//    reset anwerWrong, answerRight, timeOut...
-//  triviaGameLoop:
-//   forEach question and answerObject: // OuterLoop Array of objects, each question-answer object should have index
-//      while (not TimeOutQuestion OR answerClicked)  // get answer
-//        innerTimeLoop, displayTimeLeft:
-//        displayQuestion
-//        displayChoices
-//        selectChoice
-//      if (TimeOut) OR (answerClicked !== answer[i])
-//        display answerWrong
-//        incrementWrongCounter
-//        display CorrectAnswer
-//      else // answer is right
-//        display answerRight
-//        incrementRightCounter
-//    // at end of game
-//   display TriviaGameStats
-//   have restartOption
-// foo(() => this.a)
-$(document).ready(() => {
+/** *************************************************************************
+ *  File name: app.js
+ *  Author: Fabian Flores
+ *  Date: March, 2018
+ *  Description: Implements logic of a trivia game. The app uses an array of objects to represent
+ *    the questions, and choices. Timers are implemented between each question. 
+ */
+
+ $(document).ready(() => {
   const MaxWait = 3,
         AnswerWait = 1,
         SecondsPerQuestion = MaxWait * 1000,
@@ -241,16 +220,12 @@ $(document).ready(() => {
     }
     // remove possible choices from section
     $("#question.holder").empty();
-   // if (!gameState.isGameOver) {
-      gameState.questionCount++;
-      // display answer
-      console.log("Game State Question Count: ", gameState.questionCount);
-      $("#question-holder").html("<h2 class=\"display-3 trivia-answer\">Answer is: </h2>" +
-        "<h2 class=\"display-3 trivia-answer\">" + correctChoice + "</h2>");
 
-      // Use a setTimeout to run displayQuestion after answer interval
-      // answerTimeout = setTimeout(displayQuestion, AnswerInterval);
-    // }
+    gameState.questionCount++;
+    // display answer
+    console.log("Game State Question Count: ", gameState.questionCount);
+    $("#question-holder").html("<h2 class=\"display-3 trivia-answer\">Answer is: </h2>" +
+      "<h2 class=\"display-3 trivia-answer\">" + correctChoice + "</h2>");
 
     if (gameState.questionCount === triviaArray.length) {
       console.log("end of game... questionCount equals triviaArray.length");
@@ -267,10 +242,8 @@ $(document).ready(() => {
   //
   function gameOverRoutine() {
     console.log("in gameOverRoutine()");
-    // gameState.questionCount = 0;
     gameState.isGameOver = true;
     stopDisplayQuestions();
-    // setTimeout(stopDisplayQuestions, AnswerInterval);
     showScoreBoard();
     restartGame();
   }
