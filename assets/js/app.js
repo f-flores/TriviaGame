@@ -7,8 +7,8 @@
  */
 
  $(document).ready(() => {
-  const MaxWait = 30,
-        AnswerWait = 6,
+  const MaxWait = 10,
+        AnswerWait = 2,
         SecondsPerQuestion = MaxWait * 1000,
         AnswerInterval = AnswerWait * 1000;
   var triviaArray = [
@@ -298,8 +298,9 @@
     // console.log("in restartGame()");
 
     // creates restart button
-    restartBtn.text("Restart");
-    restartBtn.attr("id","restart-btn");
+    restartBtn.text("Restart")
+              .attr("id","restart-btn")
+              .addClass("trivia-button");
     $("#restart-section").append(restartBtn);
     restartBtn.on("click", resetGame);
   }

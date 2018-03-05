@@ -3,6 +3,7 @@
 // game font family
 //$game-font-1: 'Lato', sans-serif;
 //$game-font-2: 'Roboto Mono', monospace;
+$trivia-font: 'Acme', sans-serif;
 
 // color theme for star wars game
 $game-bg-color: beige;
@@ -26,6 +27,11 @@ html {
    background-size: 100% 125%;
     height: 100%;
   //  background-size: 100% 125%;
+  .custom-h1 {
+    font-family: $trivia-font;
+    font-size: 400%;
+    color: darkblue;
+  }
   .trivia-choice-button {
     display: block;
     background: transparent;
@@ -67,6 +73,11 @@ html {
     /* Typography */
     text-align: center;
 
+  }
+  #score-board {
+    font-family: $trivia-font;
+    text-align: center;
+    font-size: 350%;
   }
   #image-holder {
 

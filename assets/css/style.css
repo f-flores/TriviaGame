@@ -7,6 +7,10 @@ html body {
   background: #26221C url("../images/background.gif") no-repeat;
   background-size: 100% 125%;
   height: 100%; }
+  html body .custom-h1 {
+    font-family: "Acme", sans-serif;
+    font-size: 400%;
+    color: darkblue; }
   html body .trivia-choice-button {
     display: block;
     background: transparent;
@@ -35,6 +39,10 @@ html body {
     border: 2px 2px solid black;
     /* Typography */
     text-align: center; }
+  html body #score-board {
+    font-family: "Acme", sans-serif;
+    text-align: center;
+    font-size: 350%; }
   html body #image-holder {
     /* Positioning */
     position: absolute;
