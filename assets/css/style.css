@@ -6,11 +6,11 @@ html body {
   /* background image credit: https://images5.alphacoders.com/489/489261.jpg */
   background-color: gray;
   height: 100%; }
-  html body .custom-button {
+  html body .trivia-choice-button {
     display: block;
     background: transparent;
     width: 100%; }
-  html body .custom-button:hover {
+  html body .trivia-choice-button:hover {
     background-color: red;
     cursor: pointer; }
   html body .trivia-square {
