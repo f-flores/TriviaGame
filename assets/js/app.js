@@ -22,11 +22,26 @@
       "choices": ["Boston","Seattle","Chicago","Detroit"],
       "q": "In what city did the series Cheers take place?"
     },
-      {
+    {
       "a": 2,
       "choices": ["Penny","Leonard","Sheldon","Amy"],
       "q": "Which Big Bang Theory character is from Texas?"
-    }
+    },
+    {
+      "a": 2,
+      "choices": ["Shanenah","Pam","Gina","Keyolo"],
+      "q": "In 90's sitcom Martin, who is Martin's girlfriend?"
+    },
+    {
+      "a": 0,
+      "choices": ["Montreal, Canada","Los Angeles, California","Little Falls, New York","New York city"],
+      "q": "In the King of Queens, where was Doug Heffernan born?"
+    },
+    {
+      "a": 3,
+      "choices": ["TV","Radio","Hanging garden pots","A garbage disposal"],
+      "q": "In Seinfeld, what does Kramer have installed in his shower?"
+    }    
    ];
   var gameState = {
     "isTimeUp": false,
@@ -171,7 +186,7 @@
       qDiv.attr("id","question-div");
       // Adding a data-attribute
       qDiv.attr("data-name", gameState.questionCount);
-      questionText = "<h3 class=\"display-4\">" + triviaArray[gameState.questionCount].q + "</h3>";
+      questionText = "<h3 class=\"display-4\">" + triviaArray[gameState.questionCount].q + "</h3><br />";
       qDiv.html(questionText);
       $("#question-holder").append(qDiv);
 
@@ -194,7 +209,8 @@
   //
   function nextQuestion() {
     var ansIndex = triviaArray[gameState.questionCount].a,
-        correctChoice = triviaArray[gameState.questionCount].choices[ansIndex];
+        correctChoice = triviaArray[gameState.questionCount].choices[ansIndex],
+        htmlText = "";
 
     // console.log("in nextQuestion()");
     // console.log("current choice: " + gameState.currentChoice);
@@ -205,14 +221,17 @@
       // console.log("UNANSWERED question");
       gameState.correctAnswer = false;
       gameState.numUnanswered++;
+      htmlText = "<h2 class=\"display-4 trivia-answer\">Sorry... you did not answer in time</h2>";
     } else if (gameState.currentChoice === ansIndex) {
       // console.log("CORRECT answer!");
       gameState.correctAnswer = true;
       gameState.numCorrect++;
+      htmlText = "<h2 class=\"display-4 trivia-answer\">You are correct!</h2>";
     } else {
       // console.log("INCORRECT answer!");
       gameState.correctAnswer = false;
       gameState.numWrong++;
+      htmlText = "<h2 class=\"display-4 trivia-answer\">Sorry, that is wrong...</h2>";
     }
     // remove possible choices from section
     $("#question.holder").empty();
@@ -220,8 +239,9 @@
     gameState.questionCount++;
     // display answer
     // console.log("Game State Question Count: ", gameState.questionCount);
-    $("#question-holder").html("<h2 class=\"display-3 trivia-answer\">Answer is: </h2>" +
-      "<h2 class=\"display-3 trivia-answer\">" + correctChoice + "</h2>");
+    htmlText += "<h2 class=\"display-4 trivia-answer\">Answer is: </h2>" +
+    "<h2 class=\"display-4 trivia-answer\">" + correctChoice + "</h2>";
+    $("#question-holder").html(htmlText);
 
     if (gameState.questionCount === triviaArray.length) {
       // console.log("end of game... questionCount equals triviaArray.length");
