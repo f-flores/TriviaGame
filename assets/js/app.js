@@ -323,9 +323,7 @@ $(document).ready(() => {
     // $("#question-div").remove();
     $(".trivia-choice-button").remove();
 
-  //  if (!gameState.isGameOver) {
-      initGameRoutine();
-  //  }
+    initGameRoutine();
   }
 
   // -----------------------------------------------------------------------------
