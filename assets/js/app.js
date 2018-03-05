@@ -7,25 +7,25 @@
  */
 
  $(document).ready(() => {
-  const MaxWait = 3,
-        AnswerWait = 1,
+  const MaxWait = 30,
+        AnswerWait = 6,
         SecondsPerQuestion = MaxWait * 1000,
         AnswerInterval = AnswerWait * 1000;
   var triviaArray = [
     {
       "a": 1,
-      "choices": ["Choice 1","Choice 2","Choice 3","Choice 4"],
-      "q": "Question 1"
+      "choices": ["The Facts of Life","Family Ties","Different Strokes","Silver Spoon"],
+      "q": "In what sitcom did Michael J. Fox act during the 1980s?"
     },
     {
       "a": 0,
-      "choices": ["choice 1","choice 2","choice 3","choice 4"],
-      "q": "Question 2"
+      "choices": ["Boston","Seattle","Chicago","Detroit"],
+      "q": "In what city did the series Cheers take place?"
     },
       {
       "a": 2,
-      "choices": ["choice 1","choice 2","choice 3","choice 4"],
-      "q": "Question 3"
+      "choices": ["Penny","Leonard","Sheldon","Amy"],
+      "q": "Which Big Bang Theory character is from Texas?"
     }
    ];
   var gameState = {
@@ -171,7 +171,7 @@
       qDiv.attr("id","question-div");
       // Adding a data-attribute
       qDiv.attr("data-name", gameState.questionCount);
-      questionText = "<h3 class=\"display-3\">" + triviaArray[gameState.questionCount].q + "</h3>";
+      questionText = "<h3 class=\"display-4\">" + triviaArray[gameState.questionCount].q + "</h3>";
       qDiv.html(questionText);
       $("#question-holder").append(qDiv);
 
@@ -180,7 +180,7 @@
         choiceBtn = $("<button>");
         choiceBtn.attr("num-choice",iq);
         choiceBtn.addClass("trivia-choice-button");
-        choiceText = "<h3 class=\"display-4\">" + triviaArray[gameState.questionCount].choices[iq] + "</h3>";
+        choiceText = "<h3 class=\"display-5\">" + triviaArray[gameState.questionCount].choices[iq] + "</h3>";
         choiceBtn.html(choiceText);
         $(qDiv).append(choiceBtn);
       }

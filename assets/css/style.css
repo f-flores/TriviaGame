@@ -3,8 +3,9 @@
   box-sizing: border-box; }
 
 html body {
-  /* background image credit: https://images5.alphacoders.com/489/489261.jpg */
-  background-color: gray;
+  /* background image credit: https://media1.giphy.com/media/TxVVB6PfWMjE4/giphy.gif */
+  background: #26221C url("../images/background.gif") no-repeat;
+  background-size: 100% 125%;
   height: 100%; }
   html body .trivia-choice-button {
     display: block;
@@ -14,7 +15,7 @@ html body {
     background-color: red;
     cursor: pointer; }
   html body .trivia-square {
-    background-color: pink;
+    background-color: linen;
     color: darkblue;
     padding: 0% 5% 5% 5%;
     margin: 8% 8% 7% 8%;
@@ -30,7 +31,7 @@ html body {
     /* Positioning */
     margin: 0 auto;
     /* Box-model */
-    width: 600px;
+    width: 85%;
     border: 2px 2px solid black;
     /* Typography */
     text-align: center; }

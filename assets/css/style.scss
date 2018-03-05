@@ -20,8 +20,10 @@ $game-color-5: #F2F2F2;
 html {
 
   body {
-    /* background image credit: https://images5.alphacoders.com/489/489261.jpg */
-    background-color: gray;
+    /* background image credit: https://media1.giphy.com/media/TxVVB6PfWMjE4/giphy.gif */
+   // background-color: gray;
+   background: $game-color-3 url("../images/background.gif") no-repeat;
+   background-size: 100% 125%;
     height: 100%;
   //  background-size: 100% 125%;
   .trivia-choice-button {
@@ -36,7 +38,7 @@ html {
     //border: 2px 2px solid black;
   }
   .trivia-square {
-    background-color: pink;
+    background-color: linen;
     color: darkblue;
     padding: 0% 5% 5% 5%;
     margin: 8% 8% 7% 8%;
@@ -59,7 +61,7 @@ html {
      margin: 0 auto;
 
     /* Box-model */
-    width: 600px;
+    width: 85%;
     border: 2px 2px solid black;
 
     /* Typography */
