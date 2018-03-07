@@ -3,14 +3,15 @@
  *  Author: Fabian Flores
  *  Date: March, 2018
  *  Description: Implements logic of a trivia game. The app uses an array of objects to represent
- *    the questions, and choices. Timers are implemented between each question. 
+ *    the questions, and choices. Timers are implemented between each question.
  */
 
  $(document).ready(() => {
-  const MaxWait = 10,
+  const MaxWait = 6,
         AnswerWait = 2,
         SecondsPerQuestion = MaxWait * 1000,
         AnswerInterval = AnswerWait * 1000;
+
   var triviaArray = [
     {
       "a": 1,
@@ -41,7 +42,7 @@
       "a": 3,
       "choices": ["TV","Radio","Hanging garden pots","A garbage disposal"],
       "q": "In Seinfeld, what does Kramer have installed in his shower?"
-    }    
+    }
    ];
   var gameState = {
     "isTimeUp": false,
@@ -140,12 +141,14 @@
   console.log("Trivia Array: " + triviaArray);
 
   // -----------------------------------------------------------------------------
-  // getTriviaChoice() choice select () listens for start button to be clicked
+  // getTriviaChoice(event) 
   //
   function getTriviaChoice(event) {
     var choice;
 
     event.preventDefault();
+    // stop countdown
+    countDown.stop();
     // console.log("in getTriviaChoice");
     // console.log("Trivia choice button clicked... ");
 
@@ -167,9 +170,9 @@
   //
   function displayQuestion() {
     var choiceBtn,
-        qDiv = $("<div>"),
-        questionText = "",
-        choiceText = "",
+        qDiv,
+        triviaQuestion,
+        triviaChoice,
         iq = 0;
 
     console.log("In displayQuestion()");
@@ -181,27 +184,29 @@
     $("#question-holder").empty();
     // useful to check if question goes unanswered
     gameState.currentChoice = "";
+    qDiv = $("<div>");
+    triviaQuestion = $("<h3>");
 
-  //  if (!gameState.isGameOver) {
-      qDiv.attr("id","question-div");
-      // Adding a data-attribute
-      qDiv.attr("data-name", gameState.questionCount);
-      questionText = "<h3 class=\"display-4\">" + triviaArray[gameState.questionCount].q + "</h3><br />";
-      qDiv.html(questionText);
-      $("#question-holder").append(qDiv);
+    qDiv.attr("id","question-div");
+    // Adding a data-attribute
+    qDiv.attr("data-name", gameState.questionCount);
+    triviaQuestion.addClass("display-5 font-weight-bold");
+    triviaQuestion.html(triviaArray[gameState.questionCount].q + "<br>");
+    qDiv.append(triviaQuestion);
 
-      // build buttons for each question
-      for (iq = 0; iq < triviaArray[gameState.questionCount].choices.length; iq++) {
-        choiceBtn = $("<button>");
-        choiceBtn.attr("num-choice",iq);
-        choiceBtn.addClass("trivia-choice-button");
-        choiceText = "<h3 class=\"display-5\">" + triviaArray[gameState.questionCount].choices[iq] + "</h3>";
-        choiceBtn.html(choiceText);
-        $(qDiv).append(choiceBtn);
-      }
+    // build buttons for each trivia choice
+    for (iq = 0; iq < triviaArray[gameState.questionCount].choices.length; iq++) {
+      triviaChoice = $("<h3>");
+      triviaChoice.addClass("display-5");
+      triviaChoice.text(triviaArray[gameState.questionCount].choices[iq]);
+      choiceBtn = $("<button>");
+      choiceBtn.attr("num-choice",iq);
+      choiceBtn.addClass("trivia-choice-button mt-3 mb-2");
+      choiceBtn.append(triviaChoice);
+      $(qDiv).append(choiceBtn);
+    }
 
-      $("#question-holder").append(qDiv);
-   // }
+    $("#question-holder").append(qDiv);
   }
 
   // -----------------------------------------------------------------------------
@@ -217,6 +222,8 @@
     // console.log("type of current choice: " + typeof gameState.currentChoice);
     // console.log("correct choice: " + ansIndex);
     // console.log("type of correct choice: " + typeof ansIndex);
+    // stop countdown
+    // countDown.stop();
     if (gameState.currentChoice === "") {
       // console.log("UNANSWERED question");
       gameState.correctAnswer = false;
@@ -239,8 +246,7 @@
     gameState.questionCount++;
     // display answer
     // console.log("Game State Question Count: ", gameState.questionCount);
-    htmlText += "<h2 class=\"display-4 trivia-answer\">Answer is: </h2>" +
-    "<h2 class=\"display-4 trivia-answer\">" + correctChoice + "</h2>";
+    htmlText += "<h2 class=\"display-4 trivia-answer\">Answer is: " + correctChoice + "</h2>";
     $("#question-holder").html(htmlText);
 
     if (gameState.questionCount === triviaArray.length) {
@@ -282,6 +288,7 @@
     htmlText = "<p>Correct Answers: " + gameState.numCorrect + "</p>" +
       "<p>Incorrect Answers: " + gameState.numWrong + "</p>" +
       "<p>Unanswered: " + gameState.numUnanswered + "</p>";
+    scoreDiv.addClass("rainbow-text");
     scoreDiv.attr("id","score-stats");
     scoreDiv.html(htmlText);
     console.log("htmlText: " + htmlText);
@@ -298,9 +305,8 @@
     // console.log("in restartGame()");
 
     // creates restart button
-    restartBtn.text("Restart")
-              .attr("id","restart-btn")
-              .addClass("trivia-button");
+    restartBtn.attr("id","restart-btn").addClass("trivia-button");
+    restartBtn.text("Restart");
     $("#restart-section").append(restartBtn);
     restartBtn.on("click", resetGame);
   }
@@ -334,6 +340,7 @@
   //
   function beginTrivia() {
     console.log("in beginTrivia()");
+    gameState.isGameBeginning = true;
     $("#start").on("click", initGameRoutine);
   }
 
@@ -343,12 +350,18 @@
   function resetGameStats() {
     gameState.isTimeUp = false;
     gameState.isGameOver = false;
-    gameState.isGameBeginning = true;
     gameState.currentChoice = "";
     gameState.numCorrect = 0;
     gameState.numWrong = 0;
     gameState.numUnanswered = 0;
     gameState.questionCount = 0;
+  }
+  
+  // -----------------------------------------------------------------------------
+  // emptyStartBtn empties out start-control div (which can potentially effect
+  // hovers on trivia button)
+  function emptyStartBtn() {
+    $("#start-control").empty();
   }
 
   // -----------------------------------------------------------------------------
@@ -364,7 +377,13 @@
 
     if (!gameState.isGameOver) {
       showQuestion = setInterval(nextQuestion, SecondsPerQuestion + AnswerInterval);
-      displayQuestion();
+      setTimeout(emptyStartBtn, 2000);
+      if (gameState.isGameBeginning) {
+        setTimeout(displayQuestion, AnswerInterval);
+        gameState.isGameBeginning = false;
+      } else {
+        displayQuestion();
+      }
     }
   }
 
@@ -389,7 +408,7 @@
 
   if (!gameState.isGameOver) {
     doTriviaGame();
-    // capture trivia question's buttons  
+    // capture trivia question's buttons
     $(document).on("click", ".trivia-choice-button", getTriviaChoice);
   }
 });

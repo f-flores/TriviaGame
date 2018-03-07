@@ -7,11 +7,12 @@ $trivia-font: 'Acme', sans-serif;
 
 // color theme for star wars game
 $game-bg-color: beige;
-$game-color-1: #021C26;
-$game-color-2: #124559;
-$game-color-3: #26221C;
-$game-color-4: #736C63;
-$game-color-5: #F2F2F2;
+$game-color-1: #5C8E8A;
+$game-color-2: #F0F3F0;
+$game-color-3: #DBB542;
+$game-color-4: #C17561;
+$game-color-5: #5B5B59;
+$game-color-6: #CAE6F2;
 
 
 * {
@@ -22,34 +23,60 @@ html {
 
   body {
     /* background image credit: https://media1.giphy.com/media/TxVVB6PfWMjE4/giphy.gif */
-   // background-color: gray;
-   background: $game-color-3 url("../images/background.gif") no-repeat;
+   // background-color: $game-color-1;
+   background: $game-color-3 url("../images/rainbow-1418706_960_720.png") no-repeat;
    background-size: 100% 125%;
     height: 100%;
   //  background-size: 100% 125%;
   .custom-h1 {
     font-family: $trivia-font;
-    font-size: 400%;
-    color: darkblue;
+    // font-size: 300%;
+    // background-color: $game-color-5;
+    // background-image: $game-color-3 url("../images/banner-1176676_640.jpg") repeat;
+    padding: 2% 2%;
+    // color: $game-color-2;
+
+    /* Positioning */
+    margin: 0 auto;
+
+    /* Box-model */
+    width: 85%;
+    border: 2px 2px solid black;
+  }
+  .rainbow-text {
+    background: yellow;
+    background: -webkit-linear-gradient(left, red , orange, green, cyan, blue, violet);
+    background: -o-linear-gradient(right, red, orange, green, cyan, blue, violet);
+    background: -moz-linear-gradient(right, red, orange, green, cyan, blue, violet);
+    background: linear-gradient(to right, red , orangered, green, cyan, blue, violet);
+    background-clip: content-box;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 5vw;
   }
   .trivia-choice-button {
     display: block;
-    background: transparent;
+    background: $game-color-3;
+    border-radius: 25px;
+    color: black;
+    padding: 5px 5px;
+    // margin-bottom: 10px;
     width: 100%;
   }
   .trivia-choice-button:hover {
-    background-color: red;
+    background-color: $game-color-4;
     cursor: pointer;
+    color: darkblue;
 
     //border: 2px 2px solid black;
   }
   .trivia-square {
-    background-color: linen;
-    color: darkblue;
+    background-color: $game-color-2;
+    color: black;
     padding: 0% 5% 5% 5%;
     margin: 8% 8% 7% 8%;
     height: 600px;
-    //height: 80%;
+    border-radius: 25px;
   }
   .trivia-button {
     background-color: blue;

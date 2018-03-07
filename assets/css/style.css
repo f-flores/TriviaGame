@@ -4,26 +4,45 @@
 
 html body {
   /* background image credit: https://media1.giphy.com/media/TxVVB6PfWMjE4/giphy.gif */
-  background: #26221C url("../images/background.gif") no-repeat;
+  background: #DBB542 url("../images/rainbow-1418706_960_720.png") no-repeat;
   background-size: 100% 125%;
   height: 100%; }
   html body .custom-h1 {
     font-family: "Acme", sans-serif;
-    font-size: 400%;
-    color: darkblue; }
+    padding: 2% 2%;
+    /* Positioning */
+    margin: 0 auto;
+    /* Box-model */
+    width: 85%;
+    border: 2px 2px solid black; }
+  html body .rainbow-text {
+    background: yellow;
+    background: -webkit-linear-gradient(left, red, orange, green, cyan, blue, violet);
+    background: -o-linear-gradient(right, red, orange, green, cyan, blue, violet);
+    background: -moz-linear-gradient(right, red, orange, green, cyan, blue, violet);
+    background: linear-gradient(to right, red, orangered, green, cyan, blue, violet);
+    background-clip: content-box;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 5vw; }
   html body .trivia-choice-button {
     display: block;
-    background: transparent;
+    background: #DBB542;
+    border-radius: 25px;
+    color: black;
+    padding: 5px 5px;
     width: 100%; }
   html body .trivia-choice-button:hover {
-    background-color: red;
-    cursor: pointer; }
+    background-color: #C17561;
+    cursor: pointer;
+    color: darkblue; }
   html body .trivia-square {
-    background-color: linen;
-    color: darkblue;
+    background-color: #F0F3F0;
+    color: black;
     padding: 0% 5% 5% 5%;
     margin: 8% 8% 7% 8%;
-    height: 600px; }
+    height: 600px;
+    border-radius: 25px; }
   html body .trivia-button {
     background-color: blue;
     color: white;
