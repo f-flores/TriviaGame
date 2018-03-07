@@ -8,7 +8,7 @@
  $(document).ready(() => {
   const MaxWait = 4,
         AnswerWait = 3,
-        BeginWait = 2,
+        BeginWait = 1.5,
         SecondsPerQuestion = MaxWait * 1000,
         AnswerInterval = AnswerWait * 1000,
         BeginInterval = BeginWait * 1000;
@@ -97,7 +97,9 @@
   //   RUTSOM201801FSF4-Class-Repository-FSF repository on 2/24/2018
   var clockRunning = false,
       answerTimeout,
+      showAnswer,
       intervalId;
+
   var countDown = {
     "time": MaxWait,
     "reset": () => {
@@ -159,8 +161,6 @@
       return seconds;
     }
   };
-  var showAnswer = "";
-      // https://api.giphy.com/v1/gifs/random?api_key=zOxVha9Ha82FHhEMPSbIBvoOOApcLrBK&tag=cats
 
   // -----------------------------------------------------------------------------
   // getTriviaChoice(event)
@@ -179,7 +179,6 @@
       gameState.currentChoice = parseInt(choice, 10);
       clearInterval(showAnswer);
       displayAnswer();
-      // showAnswer = setInterval(displayAnswer, SecondsPerQuestion + AnswerInterval);
     }
   }
 
@@ -196,17 +195,11 @@
     console.log("In displayQuestion()");
 
     displayTime();
-
-/*     if (gameState.questionCount >= 1 && !gameState.isFirstGame) { */
-
- /*   } */
-
     // clear and remove image and prior answer if any
     $("#question-holder, #image-holder, #loading-img, .trivia-answer").empty();
-    // $(".trivia-answer").empty();
 
     // empty content from id question-holder
-    $("#question-holder").empty();
+    // $("#question-holder").empty();
 
     // useful to set and later check "unanswered" condition
     gameState.currentChoice = "";
@@ -233,11 +226,10 @@
     }
 
     $("#question-holder").append(qDiv);
-   // getdisplayAnswerInterval();
   }
 
   // -----------------------------------------------------------------------------
-  // displayAnswer displays the corresponding trivia question's answer in trivia
+  // displayAnswer() displays the corresponding trivia question's answer in trivia
   // game, by retreiving the answer in the triviaArray.
   //
   function displayAnswer() {
@@ -283,19 +275,8 @@
     } else {
       // Use setTimeout to run displayQuestion after AnswerInterval seconds and save it
       // to answerTimeout.
-      // clearInterval(displayAnswer);
       answerTimeout = setTimeout(displayQuestion, AnswerInterval);
       runTimers();
-    }
-  }
-
-  // -----------------------------------------------------------------------------
-  // getdisplayAnswerInterval() executes a series of functions when game is over
-  //
-  function getdisplayAnswerInterval() {
-    clearInterval(showAnswer);
-    if (gameState.questionCount >= 1) {
-      showAnswer = setInterval(displayAnswer, SecondsPerQuestion + AnswerInterval);
     }
   }
 
@@ -308,7 +289,7 @@
     gameState.isFirstGame = false;
     stopDisplayQuestions();
     showScoreBoard();
-    restartGame();
+    prepareRestart();
   }
 
 
@@ -337,9 +318,9 @@
 
 
   // -----------------------------------------------------------------------------
-  // restartGame() resets values and creates restart button
+  // prepareRestart() resets values and prepares restart button
   //
-  function restartGame() {
+  function prepareRestart() {
     var restartBtn = $("<button>");
 
     // creates restart button
@@ -348,14 +329,14 @@
     restartBtn.html("<h2>Restart</h2>");
     $("#restart-section").append(restartBtn);
 
-    restartBtn.on("click", resetGame);
+    restartBtn.on("click", restartGame);
   }
 
 
   // -----------------------------------------------------------------------------
-  // resetGame() empties out game stats and restarts trivia game
+  // restartGame() empties out score-board div contents and restarts trivia game
   //
-  function resetGame() {
+  function restartGame() {
     $("#restart-section, #score-board").empty();
     $(".trivia-choice-button").remove();
 
@@ -368,7 +349,6 @@
   function stopDisplayQuestions() {
     var startBtn = $("#start");
 
-    // console.log("in stopDisplayQuestions()");
     $(startBtn).blur();
     clearTimeout(answerTimeout);
     clearInterval(showAnswer);
@@ -423,9 +403,7 @@
   //
   function runTimers() {
 
-//    if (!gameState.isGameOver && gameState.isGameBeginning) {
     if (gameState.isGameBeginning) {
-        console.log("gameState.isBeginning: " + gameState.isGameBeginning);
         clearInterval(showAnswer);
         showAnswer = setInterval(displayAnswer, SecondsPerQuestion + BeginInterval);
         setTimeout(emptyStartBtn, BeginInterval);
