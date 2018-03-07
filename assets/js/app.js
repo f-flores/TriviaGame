@@ -77,7 +77,7 @@
       "sitcom": "George Lopez",
       "triviaImg": "https://media0.giphy.com/media/14kd0HVtTkw3wk/giphy.gif"
     },
-    
+
     */
    ];
   var gameState = {
@@ -159,7 +159,7 @@
       return seconds;
     }
   };
-  var showQuestion = "";
+  var showAnswer = "";
       // https://api.giphy.com/v1/gifs/random?api_key=zOxVha9Ha82FHhEMPSbIBvoOOApcLrBK&tag=cats
 
   // -----------------------------------------------------------------------------
@@ -173,13 +173,13 @@
     countDown.stop();
 
     if (gameState.isGameOver) {
-      clearInterval(showQuestion);
+      clearInterval(showAnswer);
     } else {
       choice = $(this).attr("num-choice");
       gameState.currentChoice = parseInt(choice, 10);
-      clearInterval(showQuestion);
+      clearInterval(showAnswer);
       displayAnswer();
-      showQuestion = setInterval(displayAnswer, SecondsPerQuestion + AnswerInterval);
+      // showAnswer = setInterval(displayAnswer, SecondsPerQuestion + AnswerInterval);
     }
   }
 
@@ -237,7 +237,7 @@
   }
 
   // -----------------------------------------------------------------------------
-  // displayAnswer displays the corresponding trivia question's answer in trivia 
+  // displayAnswer displays the corresponding trivia question's answer in trivia
   // game, by retreiving the answer in the triviaArray.
   //
   function displayAnswer() {
@@ -283,7 +283,9 @@
     } else {
       // Use setTimeout to run displayQuestion after AnswerInterval seconds and save it
       // to answerTimeout.
+      // clearInterval(displayAnswer);
       answerTimeout = setTimeout(displayQuestion, AnswerInterval);
+      runTimers();
     }
   }
 
@@ -291,9 +293,9 @@
   // getdisplayAnswerInterval() executes a series of functions when game is over
   //
   function getdisplayAnswerInterval() {
-    clearInterval(showQuestion);
+    clearInterval(showAnswer);
     if (gameState.questionCount >= 1) {
-      showQuestion = setInterval(displayAnswer, SecondsPerQuestion + AnswerInterval);
+      showAnswer = setInterval(displayAnswer, SecondsPerQuestion + AnswerInterval);
     }
   }
 
@@ -341,7 +343,8 @@
     var restartBtn = $("<button>");
 
     // creates restart button
-    restartBtn.attr("id","restart-btn").addClass("trivia-button col-xs-12 offset-sm-2 col-sm-4 offset-md-4 col-md-4");
+    restartBtn.attr("id","restart-btn");
+    restartBtn.addClass("trivia-button col-xs-12 offset-sm-2 col-sm-4 offset-md-4 col-md-4");
     restartBtn.html("<h2>Restart</h2>");
     $("#restart-section").append(restartBtn);
 
@@ -368,7 +371,7 @@
     // console.log("in stopDisplayQuestions()");
     $(startBtn).blur();
     clearTimeout(answerTimeout);
-    clearInterval(showQuestion);
+    clearInterval(showAnswer);
     $("#image-holder").empty();
     $("#question-holder").empty();
   }
@@ -420,15 +423,23 @@
   //
   function runTimers() {
 
-    if (!gameState.isGameOver) {
-      showQuestion = setInterval(displayAnswer, SecondsPerQuestion + AnswerInterval);
-      if (gameState.isGameBeginning) {
+//    if (!gameState.isGameOver && gameState.isGameBeginning) {
+    if (gameState.isGameBeginning) {
+        console.log("gameState.isBeginning: " + gameState.isGameBeginning);
+        clearInterval(showAnswer);
+        showAnswer = setInterval(displayAnswer, SecondsPerQuestion + BeginInterval);
         setTimeout(emptyStartBtn, BeginInterval);
-        setTimeout(displayQuestion, AnswerInterval);
-        gameState.isGameBeginning = false;
-      } else {
-        displayQuestion();
-      }
+        setTimeout(displayQuestion, BeginInterval);
+        if (gameState.isGameBeginning) {
+          gameState.isGameBeginning = false;
+        }
+    } else if (!gameState.isGameBeginning && gameState.questionCount >= 1) {
+      clearInterval(showAnswer);
+      showAnswer = setInterval(displayAnswer, SecondsPerQuestion + AnswerInterval);
+    } else {
+      displayQuestion();
+      clearInterval(showAnswer);
+      showAnswer = setInterval(displayAnswer, SecondsPerQuestion);
     }
 
   }
