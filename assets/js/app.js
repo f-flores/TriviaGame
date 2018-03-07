@@ -6,11 +6,11 @@
 // the questions, and choices. Timers are implemented between each question.
 
  $(document).ready(() => {
-  const MaxWait = 4,
-        AnswerWait = 3,
+  const QuestionMaxTime = 30,
+        AnswerShow = 8,
         BeginWait = 1.5,
-        SecondsPerQuestion = MaxWait * 1000,
-        AnswerInterval = AnswerWait * 1000,
+        SecondsPerQuestion = QuestionMaxTime * 1000,
+        AnswerInterval = AnswerShow * 1000,
         BeginInterval = BeginWait * 1000;
 
   var triviaArray = [
@@ -31,11 +31,11 @@
     {
       "a": 2,
       "choices": ["Penny","Leonard","Sheldon","Amy"],
-      "q": "Which Big Bang Theory character is from Texas?",
+      "q": "Which Big Bang Theory character is a Texas native?",
       "sitcom": "Big Bang Theory",
       "triviaImg": "https://media3.giphy.com/media/D0uo4CQGNmYVy/giphy.gif"
-    }
-/*     {
+    },
+    {
       "a": 2,
       "choices": ["Shanenah","Pam","Gina","Keyolo"],
       "q": "In 90's sitcom Martin, who is Martin's girlfriend?",
@@ -44,7 +44,7 @@
     },
     {
       "a": 0,
-      "choices": ["Montreal, Canada","Los Angeles, California","Little Falls, New York","New York city"],
+      "choices": ["Montreal, Canada","Los Angeles, California","Little Falls, New York","New York City"],
       "q": "In the King of Queens, where was Doug Heffernan born?",
       "sitcom": "The King of Queens",
       "triviaImg": "https://media2.giphy.com/media/8a2Yq2g25wYZW/giphy.gif"
@@ -77,8 +77,13 @@
       "sitcom": "George Lopez",
       "triviaImg": "https://media0.giphy.com/media/14kd0HVtTkw3wk/giphy.gif"
     },
-
-    */
+    {
+      "a": 3,
+      "choices": ["store manager","mechanic","janitor","shoe salesman"],
+      "q": "In Married with Children, what is Al Bundy's job?",
+      "sitcom": "Married With Children",
+      "triviaImg": "https://media3.giphy.com/media/ftv6IuZ8Lii8E/giphy.gif"
+    }
    ];
   var gameState = {
     "isTimeUp": false,
@@ -101,10 +106,10 @@
       intervalId;
 
   var countDown = {
-    "time": MaxWait,
+    "time": QuestionMaxTime,
     "reset": () => {
 
-      countDown.time = MaxWait;
+      countDown.time = QuestionMaxTime;
 
       // Update the time-holder div
       $("#timer-holder").html("<h4>Time Remaining: " + countDown.time.toString() + "</h4>");
@@ -192,8 +197,7 @@
         triviaChoice,
         iq = 0;
 
-    console.log("In displayQuestion()");
-
+    // console.log("In displayQuestion()");
     displayTime();
     // clear and remove image and prior answer if any
     $("#question-holder, #image-holder, #loading-img, .trivia-answer").empty();
@@ -276,7 +280,7 @@
       // Use setTimeout to run displayQuestion after AnswerInterval seconds and save it
       // to answerTimeout.
       answerTimeout = setTimeout(displayQuestion, AnswerInterval);
-      runTimers();
+      renewAnsInterval();
     }
   }
 
@@ -294,7 +298,7 @@
 
 
   // -----------------------------------------------------------------------------
-  // showScoreBoard() displays game score
+  // showScoreBoard() displays trivia scores, unanswered, incorrect and correct
   //
   function showScoreBoard() {
     var htmlText = "",
@@ -312,7 +316,6 @@
     scoreDiv.addClass("rainbow-text");
     scoreDiv.attr("id","score-stats");
     scoreDiv.html(htmlText);
-    console.log("htmlText: " + htmlText);
     $("#score-board").prepend(scoreDiv);
   }
 
@@ -395,28 +398,27 @@
     $("#question-holder").html("<h2 class=\"display-5\">Loading game... Please wait</h2>");
     $("#loading-img").html("<img src='./assets/images/loading.gif' class='img-fluid' alt='Loading gif'>");
 
-    runTimers();
+    renewAnsInterval();
   }
 
   // -----------------------------------------------------------------------------
-  // runTimers() triggers timers and sets Intervals
+  // renewAnsInterval() triggers timers at beginning of trivia game and also
+  // checks and renews the 'showAnswer', depending on conditions
   //
-  function runTimers() {
-
+  function renewAnsInterval() {
+    clearInterval(showAnswer);
     if (gameState.isGameBeginning) {
-        clearInterval(showAnswer);
-        showAnswer = setInterval(displayAnswer, SecondsPerQuestion + BeginInterval);
-        setTimeout(emptyStartBtn, BeginInterval);
-        setTimeout(displayQuestion, BeginInterval);
-        if (gameState.isGameBeginning) {
-          gameState.isGameBeginning = false;
-        }
+      showAnswer = setInterval(displayAnswer, SecondsPerQuestion + BeginInterval);
+      setTimeout(emptyStartBtn, BeginInterval);
+      setTimeout(displayQuestion, BeginInterval);
+      if (gameState.isGameBeginning) {
+        gameState.isGameBeginning = false;
+      }
     } else if (!gameState.isGameBeginning && gameState.questionCount >= 1) {
-      clearInterval(showAnswer);
       showAnswer = setInterval(displayAnswer, SecondsPerQuestion + AnswerInterval);
     } else {
+      // on first question of 2nd or more'th game
       displayQuestion();
-      clearInterval(showAnswer);
       showAnswer = setInterval(displayAnswer, SecondsPerQuestion);
     }
 
@@ -427,7 +429,6 @@
   // displayTime() displays time remaining in time div
   //
   function displayTime() {
-    // console.log("in displayTime()");
     if (gameState.isGameOver) {
       countDown.stop();
     } else {
