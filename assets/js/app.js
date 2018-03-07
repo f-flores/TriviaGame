@@ -17,33 +17,68 @@
     {
       "a": 1,
       "choices": ["The Facts of Life","Family Ties","Different Strokes","Silver Spoon"],
-      "q": "In what sitcom did Michael J. Fox act during the 1980s?"
+      "q": "In what sitcom did Michael J. Fox act during the 1980s?",
+      "sitcom": "Family Ties",
+      "triviaImg": "https://media0.giphy.com/media/cQEzI8JXi8pVe/giphy.gif"
     },
     {
       "a": 0,
       "choices": ["Boston","Seattle","Chicago","Detroit"],
-      "q": "In what city did the series Cheers take place?"
+      "q": "In what city did the series Cheers take place?",
+      "sitcom": "Cheers",
+      "triviaImg": "https://media.giphy.com/media/UuSJuhsJGURa/giphy.gif"
     },
     {
       "a": 2,
       "choices": ["Penny","Leonard","Sheldon","Amy"],
-      "q": "Which Big Bang Theory character is from Texas?"
+      "q": "Which Big Bang Theory character is from Texas?",
+      "sitcom": "Big Bang Theory",
+      "triviaImg": "https://media3.giphy.com/media/D0uo4CQGNmYVy/giphy.gif"
     }
 /*     {
       "a": 2,
       "choices": ["Shanenah","Pam","Gina","Keyolo"],
-      "q": "In 90's sitcom Martin, who is Martin's girlfriend?"
+      "q": "In 90's sitcom Martin, who is Martin's girlfriend?",
+      "sitcom": "Martin",
+      "triviaImg": "https://media3.giphy.com/media/HTytvka5AJIaI/giphy.gif"
     },
     {
       "a": 0,
       "choices": ["Montreal, Canada","Los Angeles, California","Little Falls, New York","New York city"],
-      "q": "In the King of Queens, where was Doug Heffernan born?"
+      "q": "In the King of Queens, where was Doug Heffernan born?",
+      "sitcom": "The King of Queens",
+      "triviaImg": "https://media2.giphy.com/media/8a2Yq2g25wYZW/giphy.gif"
     },
     {
       "a": 3,
       "choices": ["TV","Radio","Hanging garden pots","A garbage disposal"],
-      "q": "In Seinfeld, what does Kramer have installed in his shower?"
-    } */
+      "q": "In Seinfeld, what does Kramer have installed in his shower?",
+      "sitcom": "Seinfeld",
+      "triviaImg": "https://media3.giphy.com/media/12UlfHpF05ielO/giphy.gif"
+    },
+    {
+      "a": 2,
+      "choices": ["Monk's Diner","Central Perk","Riff's","Tom's Restaurant"],
+      "q": "In Mad About You, what restaurant do Paul and Jamie go to all the time?",
+      "sitcom": "Mad About You",
+      "triviaImg": "https://media0.giphy.com/media/l44QA0nFgOZIwnS0w/giphy.gif"
+    },
+    {
+      "a": 1,
+      "choices": ["8","10","13","12"],
+      "q": "How many seasons did Friends last?",
+      "sitcom": "Friends",
+      "triviaImg": "https://media0.giphy.com/media/31lPv5L3aIvTi/giphy.gif"
+    },
+    {
+      "a": 2,
+      "choices": ["basketball","soccer","baseball","tennis"],
+      "q": "In George Lopez, what sport does George want Max to play?",
+      "sitcom": "George Lopez",
+      "triviaImg": "https://media0.giphy.com/media/14kd0HVtTkw3wk/giphy.gif"
+    },
+    
+    */
    ];
   var gameState = {
     "isTimeUp": false,
@@ -124,23 +159,8 @@
       return seconds;
     }
   };
-  var giphyKey = "zOxVha9Ha82FHhEMPSbIBvoOOApcLrBK",
-      giphyURL = "http://api.giphy.com/v1/gifs/search?",
-      queryURL = giphyURL + "q=ryan+gosling&api_key=" + giphyKey + "&limit=2",
-      showQuestion = "";
-
- // console.log("Begin trivia game");
-  $.ajax({
-    "method": "GET",
-    "url": queryURL
-  }).then((response) => {
-    var result = "in response";
-
-    console.log(JSON.stringify(response));
-    console.log("Result: " + result);
-  });
-  // console.log("end");
-  console.log("Trivia Array: " + triviaArray);
+  var showQuestion = "";
+      // https://api.giphy.com/v1/gifs/random?api_key=zOxVha9Ha82FHhEMPSbIBvoOOApcLrBK&tag=cats
 
   // -----------------------------------------------------------------------------
   // getTriviaChoice(event)
@@ -182,8 +202,8 @@
  /*   } */
 
     // clear and remove image and prior answer if any
-    $("#image-holder").empty();
-    $(".trivia-answer").empty();
+    $("#question-holder, #image-holder, #loading-img, .trivia-answer").empty();
+    // $(".trivia-answer").empty();
 
     // empty content from id question-holder
     $("#question-holder").empty();
@@ -222,28 +242,41 @@
   function nextQuestion() {
     var ansIndex = triviaArray[gameState.questionCount].a,
         correctChoice = triviaArray[gameState.questionCount].choices[ansIndex],
-        htmlText = "";
+        htmlText = "",
+        tvImg = $("<img>");
 
     if (gameState.currentChoice === "") {
       gameState.correctAnswer = false;
       gameState.numUnanswered++;
-      htmlText = "<h2 class=\"display-4 trivia-answer\">Sorry, you ran out of time...</h2>";
+      htmlText = "<h3 class=\"display-5 trivia-answer\">Sorry, you ran out of time...</h3>";
+      htmlText += "<h3 class=\"display-5 trivia-answer\">Answer is: " + correctChoice + "</h3>";
     } else if (gameState.currentChoice === ansIndex) {
       gameState.correctAnswer = true;
       gameState.numCorrect++;
-      htmlText = "<h2 class=\"display-4 trivia-answer\">You are correct!</h2>";
+      htmlText = "<h3 class=\"display-5 trivia-answer\">You are correct!</h3>";
+      htmlText += "<h3 class=\"display-5 trivia-answer\">" + correctChoice + "</h3>";
     } else {
       gameState.correctAnswer = false;
       gameState.numWrong++;
-      htmlText = "<h2 class=\"display-4 trivia-answer\">Sorry, that is incorrect...</h2>";
+      htmlText = "<h3 class=\"display-5 trivia-answer\">Sorry, that is incorrect...</h3>";
+      htmlText += "<h3 class=\"display-5 trivia-answer\">The correct answer is: " + correctChoice + "</h3>";
     }
+
     // remove possible previous choices from section
     $("#question.holder").empty();
 
-    gameState.questionCount++;
     // display answer
-    htmlText += "<h2 class=\"display-4 trivia-answer\">Answer is: " + correctChoice + "</h2>";
     $("#question-holder").html(htmlText);
+
+    // display sitcom image
+    tvImg.addClass("img-fluid");
+    tvImg.attr("src", triviaArray[gameState.questionCount].triviaImg);
+    tvImg.attr("alt", triviaArray[gameState.questionCount].sitcom);
+    $("#image-holder").prepend(tvImg);
+
+
+    // increment question counter
+    gameState.questionCount++;
 
     if (gameState.questionCount === triviaArray.length) {
       setTimeout(gameOverRoutine, AnswerInterval);
@@ -340,6 +373,7 @@
     $(startBtn).blur();
     clearTimeout(answerTimeout);
     clearInterval(showQuestion);
+    $("#image-holder").empty();
     $("#question-holder").empty();
   }
 
@@ -380,7 +414,7 @@
 
     $("#start").animate({"opacity": "0"});
     $("#question-holder").html("<h2 class=\"display-5\">Loading game... Please wait</h2>");
-    $("#image-holder").html("<img src='./assets/images/loading.gif' alt='Loading gif'>");
+    $("#loading-img").html("<img src='./assets/images/loading.gif' class='img-fluid' alt='Loading gif'>");
 
     if (!gameState.isGameOver) {
       showQuestion = setInterval(nextQuestion, SecondsPerQuestion + AnswerInterval);

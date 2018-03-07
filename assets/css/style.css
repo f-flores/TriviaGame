@@ -25,6 +25,8 @@ html body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-size: 5vw; }
+  html body .trivia-answer {
+    line-height: 1.2; }
   html body .trivia-choice-button {
     display: block;
     background: #DBB542;
@@ -63,12 +65,19 @@ html body {
     text-align: center;
     line-height: 1.1;
     font-size: 250% !important; }
-  html body #image-holder {
+  html body #loading-img {
     /* Positioning */
     position: absolute;
     display: block;
     margin-left: 30%;
     margin-top: 10%;
+    width: 40%; }
+  html body #image-holder {
+    /* Positioning */
+    position: absolute;
+    display: block;
+    margin-left: 28%;
+    margin-top: 1%;
     width: 40%; }
   html body #start-control {
     /* Positioning */

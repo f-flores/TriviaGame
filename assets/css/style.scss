@@ -56,6 +56,10 @@ html {
       font-size: 5vw;
     }
 
+    .trivia-answer {
+      line-height: 1.2;
+    }
+
     .trivia-choice-button {
       display: block;
       background: $game-color-3;
@@ -116,12 +120,21 @@ html {
       font-size: 250% !important;
     }
 
-    #image-holder {
+    #loading-img {
       /* Positioning */
       position: absolute;
       display: block;
       margin-left: 30%;
       margin-top: 10%;
+      width: 40%;
+    }
+
+    #image-holder {
+      /* Positioning */
+      position: absolute;
+      display: block;
+      margin-left: 28%;
+      margin-top: 1%;
       width: 40%;
     }
 
