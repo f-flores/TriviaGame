@@ -178,8 +178,8 @@
       choice = $(this).attr("num-choice");
       gameState.currentChoice = parseInt(choice, 10);
       clearInterval(showQuestion);
-      nextQuestion();
-      showQuestion = setInterval(nextQuestion, SecondsPerQuestion + AnswerInterval);
+      displayAnswer();
+      showQuestion = setInterval(displayAnswer, SecondsPerQuestion + AnswerInterval);
     }
   }
 
@@ -233,13 +233,14 @@
     }
 
     $("#question-holder").append(qDiv);
-   // getNextQuestionInterval();
+   // getdisplayAnswerInterval();
   }
 
   // -----------------------------------------------------------------------------
-  // nextQuestion displays following question in trivia game
+  // displayAnswer displays the corresponding trivia question's answer in trivia 
+  // game, by retreiving the answer in the triviaArray.
   //
-  function nextQuestion() {
+  function displayAnswer() {
     var ansIndex = triviaArray[gameState.questionCount].a,
         correctChoice = triviaArray[gameState.questionCount].choices[ansIndex],
         htmlText = "",
@@ -287,12 +288,12 @@
   }
 
   // -----------------------------------------------------------------------------
-  // getNextQuestionInterval() executes a series of functions when game is over
+  // getdisplayAnswerInterval() executes a series of functions when game is over
   //
-  function getNextQuestionInterval() {
+  function getdisplayAnswerInterval() {
     clearInterval(showQuestion);
     if (gameState.questionCount >= 1) {
-      showQuestion = setInterval(nextQuestion, SecondsPerQuestion + AnswerInterval);
+      showQuestion = setInterval(displayAnswer, SecondsPerQuestion + AnswerInterval);
     }
   }
 
@@ -412,7 +413,6 @@
     $("#loading-img").html("<img src='./assets/images/loading.gif' class='img-fluid' alt='Loading gif'>");
 
     runTimers();
-
   }
 
   // -----------------------------------------------------------------------------
@@ -421,7 +421,7 @@
   function runTimers() {
 
     if (!gameState.isGameOver) {
-      showQuestion = setInterval(nextQuestion, SecondsPerQuestion + AnswerInterval);
+      showQuestion = setInterval(displayAnswer, SecondsPerQuestion + AnswerInterval);
       if (gameState.isGameBeginning) {
         setTimeout(emptyStartBtn, BeginInterval);
         setTimeout(displayQuestion, AnswerInterval);
@@ -448,12 +448,12 @@
   }
 
 
-  function doTriviaGame() {
+  function triviaGame() {
     beginTrivia();
   }
 
   if (!gameState.isGameOver) {
-    doTriviaGame();
+    triviaGame();
     // capture trivia question's buttons
     $(document).on("click", ".trivia-choice-button", getTriviaChoice);
   }
