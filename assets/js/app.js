@@ -271,9 +271,8 @@
     // display sitcom image
     tvImg.addClass("img-fluid");
     tvImg.attr("src", triviaArray[gameState.questionCount].triviaImg);
-    tvImg.attr("alt", triviaArray[gameState.questionCount].sitcom);
+    tvImg.attr("alt", triviaArray[gameState.questionCount].sitcom + " Image.");
     $("#image-holder").prepend(tvImg);
-
 
     // increment question counter
     gameState.questionCount++;
@@ -284,8 +283,6 @@
       // Use setTimeout to run displayQuestion after AnswerInterval seconds and save it
       // to answerTimeout.
       answerTimeout = setTimeout(displayQuestion, AnswerInterval);
-      // clearInterval(showQuestion);
-      // showQuestion = setInterval(nextQuestion, SecondsPerQuestion + AnswerInterval);
     }
   }
 
@@ -304,7 +301,6 @@
   // gameOverRoutine() executes a series of functions when game is over
   //
   function gameOverRoutine() {
-    // console.log("in gameOverRoutine()");
     gameState.isGameOver = true;
     gameState.isFirstGame = false;
     stopDisplayQuestions();
@@ -320,7 +316,6 @@
     var htmlText = "",
         scoreDiv = $("<div>");
 
-    // console.log("in showScoreBoard()");
     countDown.stop();
 
     // empty prior content
@@ -416,6 +411,15 @@
     $("#question-holder").html("<h2 class=\"display-5\">Loading game... Please wait</h2>");
     $("#loading-img").html("<img src='./assets/images/loading.gif' class='img-fluid' alt='Loading gif'>");
 
+    runTimers();
+
+  }
+
+  // -----------------------------------------------------------------------------
+  // runTimers() triggers timers and sets Intervals
+  //
+  function runTimers() {
+
     if (!gameState.isGameOver) {
       showQuestion = setInterval(nextQuestion, SecondsPerQuestion + AnswerInterval);
       if (gameState.isGameBeginning) {
@@ -426,7 +430,9 @@
         displayQuestion();
       }
     }
+
   }
+
 
   // -----------------------------------------------------------------------------
   // displayTime() displays time remaining in time div
