@@ -28,114 +28,122 @@ html {
    background-size: 100% 125%;
     height: 100%;
   //  background-size: 100% 125%;
-  .custom-h1 {
-    font-family: $trivia-font;
-    // font-size: 300%;
-    // background-color: $game-color-5;
-    // background-image: $game-color-3 url("../images/banner-1176676_640.jpg") repeat;
-    padding: 2% 2%;
-    // color: $game-color-2;
+    .custom-h1 {
+      font-family: $trivia-font;
+      // font-size: 300%;
+      // background-color: $game-color-5;
+      // background-image: $game-color-3 url("../images/banner-1176676_640.jpg") repeat;
+      padding: 2% 2%;
+      // color: $game-color-2;
 
-    /* Positioning */
-    margin: 0 auto;
+      /* Positioning */
+      margin: 0 auto;
 
-    /* Box-model */
-    width: 85%;
-    border: 2px 2px solid black;
-  }
-  .rainbow-text {
-    background: yellow;
-    background: -webkit-linear-gradient(left, red , orange, green, cyan, blue, violet);
-    background: -o-linear-gradient(right, red, orange, green, cyan, blue, violet);
-    background: -moz-linear-gradient(right, red, orange, green, cyan, blue, violet);
-    background: linear-gradient(to right, red , orangered, green, cyan, blue, violet);
-    background-clip: content-box;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-size: 5vw;
-  }
-  .trivia-choice-button {
-    display: block;
-    background: $game-color-3;
-    border-radius: 25px;
-    color: black;
-    padding: 5px 5px;
-    // margin-bottom: 10px;
-    width: 100%;
-  }
-  .trivia-choice-button:hover {
-    background-color: $game-color-4;
-    cursor: pointer;
-    color: darkblue;
+      /* Box-model */
+      width: 85%;
+      border: 2px 2px solid black;
+    }
 
-    //border: 2px 2px solid black;
-  }
-  .trivia-square {
-    background-color: $game-color-2;
-    color: black;
-    padding: 0% 5% 5% 5%;
-    margin: 8% 8% 7% 8%;
-    height: 600px;
-    border-radius: 25px;
-  }
-  .trivia-button {
-    background-color: blue;
-    color: white;
-    text-align: center;
-  }
-  #time-holder {
-    position: absolute;
-    top: 150px;
-    //top: 5%;
-  }
-  #question-holder {
+    .rainbow-text {
+      background: yellow;
+      background: -webkit-linear-gradient(left, red , orange, green, cyan, blue, violet);
+      background: -o-linear-gradient(right, red, orange, green, cyan, blue, violet);
+      background: -moz-linear-gradient(right, red, orange, green, cyan, blue, violet);
+      background: linear-gradient(to right, red , orangered, green, cyan, blue, violet);
+      background-clip: content-box;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 5vw;
+    }
 
-    /* Positioning */
-     margin: 0 auto;
+    .trivia-choice-button {
+      display: block;
+      background: $game-color-3;
+      border-radius: 25px;
+      color: black;
+      padding: 5px 5px;
+      // margin-bottom: 10px;
+      width: 100%;
+    }
 
-    /* Box-model */
-    width: 85%;
-    border: 2px 2px solid black;
+    .trivia-choice-button:hover {
+      background-color: $game-color-4;
+      cursor: pointer;
+      color: darkblue;
 
-    /* Typography */
-    text-align: center;
+      //border: 2px 2px solid black;
+    }
 
-  }
-  #score-board {
-    font-family: $trivia-font;
-    text-align: center;
-    font-size: 350%;
-  }
-  #image-holder {
+    .trivia-square {
+      background-color: $game-color-2;
+      color: black;
+      padding: 0% 5% 5% 5%;
+      margin: 8% 8% 7% 8%;
+      height: 600px;
+      border-radius: 25px;
+    }
 
-    /* Positioning */
-    position: absolute;
-    display: block;
-    margin-left: 30%;
-    margin-top: 10%;
-    width: 40%;
+    .trivia-button {
+      background-color: blue;
+      color: white;
+      text-align: center;
+    }
 
-  }
+    #time-holder {
+      position: absolute;
+      top: 150px;
+      //top: 5%;
+    }
 
-  #start-control {
-    /* Positioning */
-    position: absolute;
-    top: 45%;
-    left: 0%;
-    width: 100%; 
-  //  margin: 20px 0px;
+    #question-holder {
 
-    /* Typography */
-    text-align: center;
+      /* Positioning */
+      margin: 0 auto;
 
-  }
+      /* Box-model */
+      width: 85%;
+      border: 2px 2px solid black;
 
-  button {
+      /* Typography */
+      text-align: center;
 
-    /* Box-model */
-    text-align: center;
+    }
 
-  }
+    #score-board {
+      font-family: $trivia-font;
+      text-align: center;
+      line-height: 1.1;
+      font-size: 250% !important;
+    }
+
+    #image-holder {
+      /* Positioning */
+      position: absolute;
+      display: block;
+      margin-left: 30%;
+      margin-top: 10%;
+      width: 40%;
+    }
+
+    #start-control {
+      /* Positioning */
+      position: absolute;
+      top: 45%;
+      left: 0%;
+      width: 100%; 
+
+      /* Typography */
+      text-align: center;
+    }
+
+    #restart-btn:hover {
+      background-color: $game-color-5;
+      color: $game-color-6;
+    }
+
+    button {
+      text-align: center;
+    }
 
   }
 

@@ -1,16 +1,17 @@
-/** *******************************************************************************************
- *  File name: app.js
- *  Author: Fabian Flores
- *  Date: March, 2018
- *  Description: Implements logic of a trivia game. The app uses an array of objects to represent
- *    the questions, and choices. Timers are implemented between each question.
- */
+// ******************************************************************************************
+// File name: app.js
+// Author: Fabian Flores
+// Date: March, 2018
+// Description: Implements logic of a trivia game. The app uses an array of objects to represent
+// the questions, and choices. Timers are implemented between each question.
 
  $(document).ready(() => {
-  const MaxWait = 6,
-        AnswerWait = 2,
+  const MaxWait = 4,
+        AnswerWait = 3,
+        BeginWait = 2,
         SecondsPerQuestion = MaxWait * 1000,
-        AnswerInterval = AnswerWait * 1000;
+        AnswerInterval = AnswerWait * 1000,
+        BeginInterval = BeginWait * 1000;
 
   var triviaArray = [
     {
@@ -27,8 +28,8 @@
       "a": 2,
       "choices": ["Penny","Leonard","Sheldon","Amy"],
       "q": "Which Big Bang Theory character is from Texas?"
-    },
-    {
+    }
+/*     {
       "a": 2,
       "choices": ["Shanenah","Pam","Gina","Keyolo"],
       "q": "In 90's sitcom Martin, who is Martin's girlfriend?"
@@ -42,12 +43,13 @@
       "a": 3,
       "choices": ["TV","Radio","Hanging garden pots","A garbage disposal"],
       "q": "In Seinfeld, what does Kramer have installed in his shower?"
-    }
+    } */
    ];
   var gameState = {
     "isTimeUp": false,
     "isGameOver": false,
     "isGameBeginning": false,
+    "isFirstGame": true,
     "correctAnswer": false,
     "currentChoice": "",
     "numCorrect": 0,
@@ -141,7 +143,7 @@
   console.log("Trivia Array: " + triviaArray);
 
   // -----------------------------------------------------------------------------
-  // getTriviaChoice(event) 
+  // getTriviaChoice(event)
   //
   function getTriviaChoice(event) {
     var choice;
@@ -149,15 +151,11 @@
     event.preventDefault();
     // stop countdown
     countDown.stop();
-    // console.log("in getTriviaChoice");
-    // console.log("Trivia choice button clicked... ");
-
 
     if (gameState.isGameOver) {
       clearInterval(showQuestion);
     } else {
       choice = $(this).attr("num-choice");
-      // console.log("clicked choice: " + choice);
       gameState.currentChoice = parseInt(choice, 10);
       clearInterval(showQuestion);
       nextQuestion();
@@ -176,13 +174,21 @@
         iq = 0;
 
     console.log("In displayQuestion()");
+
     displayTime();
+
+/*     if (gameState.questionCount >= 1 && !gameState.isFirstGame) { */
+
+ /*   } */
+
     // clear and remove image and prior answer if any
     $("#image-holder").empty();
     $(".trivia-answer").empty();
+
     // empty content from id question-holder
     $("#question-holder").empty();
-    // useful to check if question goes unanswered
+
+    // useful to set and later check "unanswered" condition
     gameState.currentChoice = "";
     qDiv = $("<div>");
     triviaQuestion = $("<h3>");
@@ -207,6 +213,7 @@
     }
 
     $("#question-holder").append(qDiv);
+   // getNextQuestionInterval();
   }
 
   // -----------------------------------------------------------------------------
@@ -217,44 +224,45 @@
         correctChoice = triviaArray[gameState.questionCount].choices[ansIndex],
         htmlText = "";
 
-    // console.log("in nextQuestion()");
-    // console.log("current choice: " + gameState.currentChoice);
-    // console.log("type of current choice: " + typeof gameState.currentChoice);
-    // console.log("correct choice: " + ansIndex);
-    // console.log("type of correct choice: " + typeof ansIndex);
-    // stop countdown
-    // countDown.stop();
     if (gameState.currentChoice === "") {
-      // console.log("UNANSWERED question");
       gameState.correctAnswer = false;
       gameState.numUnanswered++;
-      htmlText = "<h2 class=\"display-4 trivia-answer\">Sorry... you did not answer in time</h2>";
+      htmlText = "<h2 class=\"display-4 trivia-answer\">Sorry, you ran out of time...</h2>";
     } else if (gameState.currentChoice === ansIndex) {
-      // console.log("CORRECT answer!");
       gameState.correctAnswer = true;
       gameState.numCorrect++;
       htmlText = "<h2 class=\"display-4 trivia-answer\">You are correct!</h2>";
     } else {
-      // console.log("INCORRECT answer!");
       gameState.correctAnswer = false;
       gameState.numWrong++;
-      htmlText = "<h2 class=\"display-4 trivia-answer\">Sorry, that is wrong...</h2>";
+      htmlText = "<h2 class=\"display-4 trivia-answer\">Sorry, that is incorrect...</h2>";
     }
-    // remove possible choices from section
+    // remove possible previous choices from section
     $("#question.holder").empty();
 
     gameState.questionCount++;
     // display answer
-    // console.log("Game State Question Count: ", gameState.questionCount);
     htmlText += "<h2 class=\"display-4 trivia-answer\">Answer is: " + correctChoice + "</h2>";
     $("#question-holder").html(htmlText);
 
     if (gameState.questionCount === triviaArray.length) {
-      // console.log("end of game... questionCount equals triviaArray.length");
       setTimeout(gameOverRoutine, AnswerInterval);
     } else {
-      // Use a setTimeout to run displayQuestion after answer interval
+      // Use setTimeout to run displayQuestion after AnswerInterval seconds and save it
+      // to answerTimeout.
       answerTimeout = setTimeout(displayQuestion, AnswerInterval);
+      // clearInterval(showQuestion);
+      // showQuestion = setInterval(nextQuestion, SecondsPerQuestion + AnswerInterval);
+    }
+  }
+
+  // -----------------------------------------------------------------------------
+  // getNextQuestionInterval() executes a series of functions when game is over
+  //
+  function getNextQuestionInterval() {
+    clearInterval(showQuestion);
+    if (gameState.questionCount >= 1) {
+      showQuestion = setInterval(nextQuestion, SecondsPerQuestion + AnswerInterval);
     }
   }
 
@@ -265,6 +273,7 @@
   function gameOverRoutine() {
     // console.log("in gameOverRoutine()");
     gameState.isGameOver = true;
+    gameState.isFirstGame = false;
     stopDisplayQuestions();
     showScoreBoard();
     restartGame();
@@ -302,17 +311,17 @@
   function restartGame() {
     var restartBtn = $("<button>");
 
-    // console.log("in restartGame()");
-
     // creates restart button
-    restartBtn.attr("id","restart-btn").addClass("trivia-button");
-    restartBtn.text("Restart");
+    restartBtn.attr("id","restart-btn").addClass("trivia-button col-xs-12 offset-sm-2 col-sm-4 offset-md-4 col-md-4");
+    restartBtn.html("<h2>Restart</h2>");
     $("#restart-section").append(restartBtn);
+
     restartBtn.on("click", resetGame);
   }
 
+
   // -----------------------------------------------------------------------------
-  // resetGame() resets game and begins new trivia game
+  // resetGame() empties out game stats and restarts trivia game
   //
   function resetGame() {
     $("#restart-section, #score-board").empty();
@@ -339,7 +348,6 @@
   // beginTrivia() listens for start button to be clicked
   //
   function beginTrivia() {
-    console.log("in beginTrivia()");
     gameState.isGameBeginning = true;
     $("#start").on("click", initGameRoutine);
   }
@@ -356,7 +364,7 @@
     gameState.numUnanswered = 0;
     gameState.questionCount = 0;
   }
-  
+
   // -----------------------------------------------------------------------------
   // emptyStartBtn empties out start-control div (which can potentially effect
   // hovers on trivia button)
@@ -368,17 +376,16 @@
   // initGameRoutine() sets some initial variables for trivia game
   //
   function initGameRoutine() {
-    // console.log("in initGameRoutine()");
     resetGameStats();
 
     $("#start").animate({"opacity": "0"});
-    $("#question-holder").html("<h2>Loading game... Please wait</h2>");
+    $("#question-holder").html("<h2 class=\"display-5\">Loading game... Please wait</h2>");
     $("#image-holder").html("<img src='./assets/images/loading.gif' alt='Loading gif'>");
 
     if (!gameState.isGameOver) {
       showQuestion = setInterval(nextQuestion, SecondsPerQuestion + AnswerInterval);
-      setTimeout(emptyStartBtn, 2000);
       if (gameState.isGameBeginning) {
+        setTimeout(emptyStartBtn, BeginInterval);
         setTimeout(displayQuestion, AnswerInterval);
         gameState.isGameBeginning = false;
       } else {
@@ -402,7 +409,6 @@
 
 
   function doTriviaGame() {
-    // console.log("in doTriviaGame()");
     beginTrivia();
   }
 
